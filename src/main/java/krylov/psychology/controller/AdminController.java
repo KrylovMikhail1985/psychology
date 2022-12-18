@@ -9,7 +9,6 @@ import krylov.psychology.service.DayTimeServiceImpl;
 import krylov.psychology.service.DefaultTimeServiceImpl;
 import krylov.psychology.service.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
@@ -40,7 +39,7 @@ public class AdminController {
     @Autowired
     private DayTimeServiceImpl dayTimeService;
 
-    final long DAY = 86400000;
+    private final long day = 86400000;
 
     @GetMapping("")
     public String admin() {
@@ -124,7 +123,7 @@ public class AdminController {
         int year = date.getYear();
         int dateDate = date.getDate();
         if (next != null && next.equalsIgnoreCase("yes")) {
-            if(month == 11) {
+            if (month == 11) {
                 month = 0;
                 year = year + 1;
             } else {
@@ -213,8 +212,8 @@ public class AdminController {
         model.addAttribute("d3", localDayList.get(2));
         model.addAttribute("d4", localDayList.get(3));
         model.addAttribute("d5", localDayList.get(4));
-        model.addAttribute("before" , week - 5);
-        model.addAttribute("after" , week + 5);
+        model.addAttribute("before", week - 5);
+        model.addAttribute("after", week + 5);
         return "admin_all_days.html";
     }
     @GetMapping("admin_one_day/{dataTimeLong}")
@@ -282,10 +281,10 @@ public class AdminController {
     private  List<Day> utilCreateLocalDayList(List<Day> currentDayList, Date startDate) {
         List<Day> localDayList = new ArrayList<>();
         for (var i = 0; i < 5; i++) {
-            Date newDate = new Date(startDate.getTime() + DAY * i);
+            Date newDate = new Date(startDate.getTime() + day * i);
             Day newDay = new Day(newDate);
             for (Day day: currentDayList) {
-                if(day.getDate().getTime() == newDate.getTime()) {
+                if (day.getDate().getTime() == newDate.getTime()) {
                     newDay = day;
                 }
             }
@@ -301,10 +300,10 @@ public class AdminController {
         return dayService.create(day);
     }
     private int utilCountOfDaysInMonth(Date date) {
-        final int YEAR1900 = 1900;
-        final int ONE = 1;
-        int year = date.getYear() + YEAR1900;
-        int month = date.getMonth() + ONE;
+        final int year1900 = 1900;
+        final int one = 1;
+        int year = date.getYear() + year1900;
+        int month = date.getMonth() + one;
         YearMonth yearMonthObject = YearMonth.of(year, month);
         return yearMonthObject.lengthOfMonth();
     }

@@ -4,7 +4,6 @@ import krylov.psychology.model.DefaultTime;
 
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 
 public interface DefaultTimeService {
     List<DefaultTime> findAllDefaultTimeSortedByTime();

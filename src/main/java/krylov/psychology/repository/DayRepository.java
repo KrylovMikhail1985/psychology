@@ -16,7 +16,7 @@ public interface DayRepository extends JpaRepository<Day, Long>,
         QuerydslPredicateExecutor<Day>,
         QuerydslBinderCustomizer<QDay> {
     @Override
-    default void customize(QuerydslBindings bindings, QDay qDay) {}
+    default void customize(QuerydslBindings bindings, QDay qDay) { }
 
     Optional<Day> findByDate(Date date);
 }

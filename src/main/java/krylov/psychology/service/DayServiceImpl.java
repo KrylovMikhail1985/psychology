@@ -13,17 +13,17 @@ import java.util.List;
 public class DayServiceImpl implements DayService {
     @Autowired
     private DayRepository dayRepository;
-    final long DAY = 86400000;
+    private final long day = 86400000;
     @Override
     public List<Day> findAllDayInPeriod(Date startDate, Date lastDate) {
-        startDate = new Date(startDate.getTime() - DAY);
-        lastDate = new Date(lastDate.getTime() + DAY);
+        startDate = new Date(startDate.getTime() - day);
+        lastDate = new Date(lastDate.getTime() + day);
         return (List<Day>) dayRepository.findAll(QDay.day.date.after(startDate).and(QDay.day.date.before(lastDate)));
     }
 
     @Override
     public List<Day> findAllDayFromDate(Date startDate) {
-        startDate = new Date(startDate.getTime() - DAY);
+        startDate = new Date(startDate.getTime() - day);
         return (List<Day>) dayRepository.findAll(QDay.day.date.after(startDate));
     }
 

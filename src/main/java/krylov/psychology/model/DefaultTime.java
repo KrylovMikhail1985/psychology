@@ -1,7 +1,5 @@
 package krylov.psychology.model;
 
-import jdk.jfr.Timespan;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
