@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en" xmlns:th=”http://www.thymeleaf.org”>
+<link rel="stylesheet" type="text/css" href="/src/main/resources/static/css/style.css" th:href="@{css/style.css}"/>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>all_therapies</title>
+</head>
+<nav>
+    <a href="/">Главная</a>
+    |
+    <a href="/admin">admin</a>
+    |
+    <a href="/admin/admin_all_products">Показать все продукты</a>
+    |
+    <a href="/admin/create_new_product">Создать новый продукт</a>
+    |
+    <a href="/admin/active_new_month">Открыть запись на текущий месяц</a>
+    |
+    <a href="/admin/active_new_month?next=yes">Открыть запись на следующий месяц</a>
+</nav>
+<body>
+
+<table>
+    <tr>
+        <th colspan="2">Перечень оказываемых услуг</th>
+<!--        <th>Стоимость</th>-->
+<!--        <th>Продолжительность</th>-->
+<!--        <th></th>-->
+    </tr>
+    <tr th:each="prod : ${listOfProducts}">
+        <td th:text="${prod.productName}">Наименование продукта</td>
+<!--        <td th:text="${prod.cost}">1000</td>-->
+<!--        <td th:text="${prod.duration}">999</td>-->
+        <td>
+            <a th:href="'/' + product + '/' + ${prod.id}" class="button">подробнее</a>
+            <a th:href="'/' + record + '/' + ${prod.id}" class="button">записаться</a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

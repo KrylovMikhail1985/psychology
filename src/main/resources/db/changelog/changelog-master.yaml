@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - include:
+      file: classpath:db/changelog/changelog-01.yaml
+  - include:
+      file: classpath:db/changelog/changelog-02.yaml
+  - include:
+      file: classpath:db/changelog/changelog-03.yaml
+  - include:
+      file: classpath:db/changelog/changelog-04.yaml

@@ -1,0 +1,19 @@
+databaseChangeLog:
+- changeSet:
+    id: 1670910088841-1
+    author: mikhailkrylov (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: local_time
+            type: time
+        tableName: day_times
+- changeSet:
+    id: 1670910088841-2
+    author: mikhailkrylov (generated)
+    changes:
+    - dropColumn:
+        columnName: TIME
+        tableName: DAY_TIMES
+

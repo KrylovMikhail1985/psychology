@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th=”http://www.thymeleaf.org” xmlns:form="http://www.w3.org/1999/html">
+<link rel="stylesheet" type="text/css" href="/src/main/resources/static/css/style.css" th:href="@{/css/style.css}"/>
+<head>
+    <meta charset="UTF-8">
+    <title>Open recording</title>
+</head>
+<nav>
+    <a href="/">Главная</a>
+    |
+    <a href="/admin">admin</a>
+    |
+    <a href="/admin/admin_all_products">Показать все продукты</a>
+    |
+    <a href="/admin/create_new_product">Создать новый продукт</a>
+    |
+    <a href="/admin/active_new_month">Открыть запись на текущий месяц</a>
+    |
+    <a href="/admin/active_new_month?next=yes">Открыть запись на следующий месяц</a>
+</nav>
+<body>
+На <strong th:text="${#dates.format(dataTimeLong, 'EEEE dd.MM.yyyy')}">какое-то число</strong> запись не открыта
+<form action="/admin/post_create_new_day" method="post">
+    <input type="number" hidden="hidden" name="dataTime" th:value="${dataTimeLong.getTime()}">
+    <input type="submit" value="Открыть запись на данный день"/>
+</form>
+
+</body>
+</html>

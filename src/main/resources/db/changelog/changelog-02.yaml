@@ -1,0 +1,57 @@
+databaseChangeLog:
+- changeSet:
+    id: 1670162614324-1
+    author: mikhailkrylov (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: day_timesPK
+            name: id
+            type: BIGINT
+        - column:
+            name: time
+            type: INT
+        - column:
+            name: time_is_free
+            type: BOOLEAN
+        - column:
+            name: day_id
+            type: BIGINT
+        tableName: day_times
+- changeSet:
+    id: 1670162614324-2
+    author: mikhailkrylov (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: daysPK
+            name: id
+            type: BIGINT
+        - column:
+            name: date
+            type: TIMESTAMP
+        tableName: days
+- changeSet:
+    id: 1670162614324-3
+    author: mikhailkrylov (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: day_id
+        baseTableName: day_times
+        constraintName: FK4tfdv698mesoe9dhbvol79mm2
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: days
+        validate: true
+

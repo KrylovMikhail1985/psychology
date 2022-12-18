@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en" xmlns:th=”http://www.thymeleaf.org”>
+<link rel="stylesheet" type="text/css" href="/src/main/resources/static/css/style.css" th:href="@{/css/style.css}"/>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>therapy_updating</title>
+</head>
+<nav>
+    <a href="/">Главная</a>
+    |
+    <a href="/admin">admin</a>
+    |
+    <a href="/admin/admin_all_products">Показать все продукты</a>
+    |
+    <a href="/admin/create_new_product">Создать новый продукт</a>
+    |
+    <a href="/admin/active_new_month">Открыть запись на текущий месяц</a>
+    |
+    <a href="/admin/active_new_month?next=yes">Открыть запись на следующий месяц</a>
+</nav>
+<body>
+<!--<h3 th:text="Корректировка + ' ' + продукта + ':' + ' ' + ${product.productName}">-->
+<h3>Текущий продукт:</h3>
+
+<table>
+    <tr>
+        <td><strong>Наименование:</strong></td>
+        <td th:text="${product.productName}">Индивидуальная терапия</td>
+    </tr>
+    <tr>
+        <td><strong>Стоимость [руб]:</strong></td>
+        <td th:text="${product.cost}"> 3000</td>
+    </tr>
+    <tr>
+        <td><strong>Длительность [мин]:</strong></td>
+        <td th:text="${product.duration}">60</td>
+    </tr>
+    <tr>
+        <td><strong>Актуальность:</strong></td>
+        <td th:text="${product.actual}">true</td>
+    </tr>
+    <tr>
+        <td><strong>Приоритет:</strong></td>
+        <td th:text="${product.priority}">14</td>
+    </tr>
+    <tr>
+        <td><strong>Описание:</strong></td>
+        <td th:text="${product.description}">Описание данного продукта на много строчек с пояснениями.</td>
+    </tr>
+</table>
+
+<a th:href="'/' + admin + '/' + update_product + '/' + ${product.id}" class="button">внести изменения</a>
+<br/>
+<a th:href="'/' + admin + '/' + delete_product + '/' + ${product.id}" class="button">удалить</a>
+
+</body>
+</html>

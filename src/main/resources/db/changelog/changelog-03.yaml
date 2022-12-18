@@ -1,0 +1,20 @@
+databaseChangeLog:
+- changeSet:
+    id: 1670818932327-1
+    author: mikhailkrylov (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: default_timePK
+            name: id
+            type: BIGINT
+        - column:
+            name: time
+            type: time
+        tableName: default_time
+

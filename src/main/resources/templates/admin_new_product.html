@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th=”http://www.thymeleaf.org” xmlns:form="http://www.w3.org/1999/html">
+<link rel="stylesheet" type="text/css" href="/src/main/resources/static/css/style.css" th:href="@{/css/style.css}"/>
+<head>
+    <meta charset="UTF-8">
+    <title>adding new product</title>
+</head>
+<nav>
+    <a href="/">Главная</a>
+    |
+    <a href="/admin">admin</a>
+    |
+    <a href="/admin/admin_all_products">Показать все продукты</a>
+    |
+    <a href="/admin/create_new_product">Создать новый продукт</a>
+    |
+    <a href="/admin/active_new_month">Открыть запись на текущий месяц</a>
+    |
+    <a href="/admin/active_new_month?next=yes">Открыть запись на следующий месяц</a>
+</nav>
+<body>
+
+<form action="/admin/post_create_new_product" method="post" th:object="${product}">
+    Наименование: <input type="text" th:field="*{productName}">
+    <x th:if="${#fields.hasErrors('productName')}" th:errors="*{productName}">Error</x>
+    <br/><br/>
+    Стоимость [руб]: <input type="text" th:field="*{cost}">
+    <x th:if="${#fields.hasErrors('cost')}" th:errors="*{cost}">Error</x>
+    <br/><br/>
+    Длительность [мин]: <select type="text" th:field="*{duration}">
+        <option th:value="30 + ' ' + ммн">30 мин</option>
+        <option th:value="1 + ' ' + час">1 час</option>
+        <option th:value="1 + ',' + 5 + ' ' + часа">1,5 часа</option>
+        <option th:value="2 + ' ' + часа">2 часа</option>
+        <option th:value="2 + ',' + 5 + ' ' + часа">2,5 часа</option>
+        <option th:value="3 + ' ' + часа">3 часа</option>
+        <option th:value="3 + ',' + 5 + ' ' + часа">3,5 часа</option>
+        <option th:value="4 + ' ' + часа">4 часа</option>
+        <option th:value="4 + ',' + 5 + ' ' + часа">4,5 часа</option>
+
+    <x th:if="${#fields.hasErrors('duration')}" th:errors="*{duration}">Error</x>
+    </select>
+    <br/><br/>
+    Описание: <input type="text" th:field="*{description}">
+    <x th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Error</x>
+    <br/><br/>
+    Актуальность: <select type="text" th:field="*{actual}">
+        <option th:value="true">actual</option>
+        <option th:value="false">disabled</option>
+    <x th:if="${#fields.hasErrors('actual')}" th:errors="*{actual}">Error</x>
+    </select>
+    <br/><br/>
+    Приоритет: <input type="text" th:field="*{priority}">
+    <x th:if="${#fields.hasErrors('priority')}" th:errors="*{priority}">Error</x>
+    <br/><br/>
+    <input type="submit" value="Подтвердить">
+</form>
+
+</body>
+</html>

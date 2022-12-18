@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en" xmlns:th=”http://www.thymeleaf.org”>
+<link rel="stylesheet" type="text/css" href="/src/main/resources/static/css/style.css" th:href="@{/css/style.css}"/>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>one_day</title>
+</head>
+<body>
+<nav>
+    <a href="/">Главная</a>
+    |
+    <a href="/admin">admin</a>
+    |
+    <a href="/admin/admin_all_products">Показать все продукты</a>
+    |
+    <a href="/admin/create_new_product">Создать новый продукт</a>
+    |
+    <a href="/admin/active_new_month">Открыть запись на текущий месяц</a>
+    |
+    <a href="/admin/active_new_month?next=yes">Открыть запись на следующий месяц</a>
+</nav>
+
+<h3 th:text="${#dates.format(day.getDate(), 'EEEE dd.MM.yyyy')}"> 23.11.1985</h3>
+<h2 style="background-color: red">Нужно отключить диактивацию/активацию при наличии записи на это время</h2>
+<table>
+    <thead>
+        <th>время</th>
+        <th>активность</th>
+        <th>Информация</th>
+    </thead>
+    <tr th:each="dayTime : ${dayTimeList}">
+        <td th:text="${dayTime.localTime}">11:40</td>
+        <td><a th:text="${dayTime.timeIsFree}"
+               th:href="'/' + admin + '/' + daytime_active + '/'
+               + ${dayTime.id} + '/' + ${day.getDate().getTime()}">true</a></td>
+        <td>information</td>
+    </tr>
+</table>
+<a class="button" th:href="'/' + admin + '/' + delete_day + '/' + ${day.getId()}">удалить день</a>
+<h3 style="background-color: red">сделать удаление только для пустых дней</h3>
+</body>
+</html>

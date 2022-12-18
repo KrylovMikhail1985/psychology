@@ -1,0 +1,78 @@
+databaseChangeLog:
+- changeSet:
+    id: 1670162444900-1
+    author: mikhailkrylov (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: productsPK
+            name: id
+            type: BIGINT
+        - column:
+            name: actual
+            type: BOOLEAN
+        - column:
+            name: cost
+            type: INT
+        - column:
+            name: description
+            type: VARCHAR(255)
+        - column:
+            name: duration
+            type: VARCHAR(255)
+        - column:
+            name: priority
+            type: INT
+        - column:
+            name: product_name
+            type: VARCHAR(255)
+        tableName: products
+- changeSet:
+    id: 1670162444900-2
+    author: mikhailkrylov (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: therapiesPK
+            name: id
+            type: BIGINT
+        - column:
+            name: created_at
+            type: TIMESTAMP
+        - column:
+            name: email
+            type: VARCHAR(255)
+        - column:
+            name: name
+            type: VARCHAR(255)
+        - column:
+            name: phone_number
+            type: VARCHAR(255)
+        - column:
+            name: product_id
+            type: BIGINT
+        tableName: therapies
+- changeSet:
+    id: 1670162444900-3
+    author: mikhailkrylov (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: product_id
+        baseTableName: therapies
+        constraintName: FKj5v824hwu0ny4mb1eb4pvq898
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: products
+        validate: true
+

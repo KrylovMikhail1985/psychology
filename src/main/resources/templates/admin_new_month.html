@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th=”http://www.thymeleaf.org” xmlns:form="http://www.w3.org/1999/html">
+<link rel="stylesheet" type="text/css" href="/src/main/resources/static/css/style.css" th:href="@{/css/style.css}"/>
+<head>
+    <meta charset="UTF-8">
+    <title>Open recording</title>
+</head>
+<nav>
+    <a href="/">Главная</a>
+    |
+    <a href="/admin">admin</a>
+    |
+    <a href="/admin/admin_all_products">Показать все продукты</a>
+    |
+    <a href="/admin/create_new_product">Создать новый продукт</a>
+    |
+    <a href="/admin/active_new_month">Открыть запись на текущий месяц</a>
+    |
+    <a href="/admin/active_new_month?next=yes">Открыть запись на следующий месяц</a>
+</nav>
+<body>
+выбираем какие дни будем работать
+<form action="/admin/active_new_month" method="post">
+    <input type="checkbox" name="1" value="1">1
+    <input type="checkbox" name="2" value="2">2
+    <input type="checkbox" name="3" value="3">3
+    <input type="checkbox" name="4" value="4">4
+    <input type="checkbox" name="5" value="5">5
+    <input type="checkbox" name="6" value="6">6
+    <input type="checkbox" name="7" value="7">7
+    <br/>
+    <input type="checkbox" name="8" value="8">8
+    <input type="checkbox" name="9" value="9">9
+    <input type="checkbox" name="10" value="10">10
+    <input type="checkbox" name="11" value="11">11
+    <input type="checkbox" name="12" value="12">12
+    <input type="checkbox" name="13" value="13">13
+    <input type="checkbox" name="14" value="14">14
+    <br/>
+    <input type="checkbox" name="15" value="15">15
+    <input type="checkbox" name="16" value="16">16
+    <input type="checkbox" name="17" value="17">17
+    <input type="checkbox" name="18" value="18">18
+    <input type="checkbox" name="19" value="19">19
+    <input type="checkbox" name="20" value="20">20
+    <input type="checkbox" name="21" value="21">21
+    <br/>
+    <input type="checkbox" name="22" value="22">22
+    <input type="checkbox" name="23" value="23">23
+    <input type="checkbox" name="24" value="24">24
+    <input type="checkbox" name="25" value="25">25
+    <input type="checkbox" name="26" value="26">26
+    <input type="checkbox" name="27" value="27">27
+    <input type="checkbox" name="28" value="28">28
+    <br/>
+    <input th:if="${countOfDays} > 28" type="checkbox" name="29" value="29">29
+    <input th:if="${countOfDays} > 29" type="checkbox" name="30" value="30">30
+    <input th:if="${countOfDays} > 30" type="checkbox" name="31" value="31">31
+    <input type="month" hidden="hidden" name="month" th:value="${month}">
+    <input type="text" hidden="hidden" name="year" th:value="${year}">
+    <br/>
+    <input type="submit" value="Подтвердить">
+</form>
+
+</body>
+</html>
