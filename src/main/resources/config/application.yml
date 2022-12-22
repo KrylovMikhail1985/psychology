@@ -10,5 +10,10 @@ spring:
     #    active: myTests
     active: ${PROD:dev}
 
-PASSWORD: ${SECRET:$2a$10$DordpFcR24yGzOrOl1AKe.sVSYIAxp6ZpZ84MS5UlDcztxbjvcp8G}
+adminPassword: ${SECRET:$2a$10$DordpFcR24yGzOrOl1AKe.sVSYIAxp6ZpZ84MS5UlDcztxbjvcp8G}
+adminName: KrylovaDi
+
+jwt-token-secret: ${JWT-SECRET:lkrfslrekjfalecmasieuro3wurhnsjkcafjsefljashkfaewjkfljsrhkjgjsfndjtgtdlgjsghsjdyr}
+# 3600000 - 1 hour
+jwt-token-expired: 1800000
 

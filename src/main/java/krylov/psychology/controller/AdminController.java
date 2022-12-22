@@ -4,11 +4,14 @@ import krylov.psychology.model.Day;
 import krylov.psychology.model.DayTime;
 import krylov.psychology.model.DefaultTime;
 import krylov.psychology.model.Product;
+import krylov.psychology.security.jwt.JwtTokenProvider;
 import krylov.psychology.service.DayServiceImpl;
 import krylov.psychology.service.DayTimeServiceImpl;
 import krylov.psychology.service.DefaultTimeServiceImpl;
 import krylov.psychology.service.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
@@ -20,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.time.YearMonth;
 import java.util.ArrayList;
@@ -30,6 +35,12 @@ import java.util.Map;
 @Controller
 @RequestMapping("admin")
 public class AdminController {
+    @Value("${adminPassword}")
+    private String adminPassword;
+    @Value("${adminName}")
+    private String adminName;
+    @Autowired
+    private PasswordEncoder encoder;
     @Autowired
     private ProductServiceImpl productService;
     @Autowired
@@ -38,12 +49,35 @@ public class AdminController {
     private DayServiceImpl dayService;
     @Autowired
     private DayTimeServiceImpl dayTimeService;
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     private final long day = 86400000;
 
     @GetMapping("")
     public String admin() {
         return "admin.html";
+    }
+    @GetMapping("/login")
+    public String login() {
+        return "admin_login.html";
+    }
+    @PostMapping("/login")
+    public String loginPost(@RequestParam(name = "login") String login,
+                            @RequestParam(name = "password") String password,
+                            HttpServletResponse response) {
+        String token;
+
+        if (userAndPasswordIsCorrect(login, password)) {
+            System.out.println("IF is working!");
+            token = jwtTokenProvider.createToken(login, password);
+
+            Cookie loginCookie = new Cookie("auth_token", token);
+            loginCookie.setMaxAge(30 * 5);
+            response.addCookie(loginCookie);
+            return "redirect:" + "/admin";
+        }
+        return "admin_login.html";
     }
 
     @GetMapping("/create_new_product")
@@ -313,5 +347,13 @@ public class AdminController {
             dateList.add(day.getDate());
         }
         return dateList;
+    }
+    private boolean userAndPasswordIsCorrect(String userName, String password) {
+        if (userName.equals(adminName) && encoder.matches(password, adminPassword)) {
+            return true;
+        } else {
+            System.out.println("User or password is not correct!");
+            return false;
+        }
     }
 }
