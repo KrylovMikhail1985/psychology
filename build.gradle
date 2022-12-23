@@ -54,6 +54,9 @@ dependencies {
             //'org.bouncycastle:bcprov-jdk15on:1.70',
             'io.jsonwebtoken:jjwt-jackson:0.11.5' // or 'io.jsonwebtoken:jjwt-gson:0.11.5' for gson
 
+    // for auto filing database
+//    testImplementation 'com.github.database-rider:rider-spring:1.35.0'
+    testImplementation 'com.github.database-rider:rider-junit5:1.35.0'
 }
 
 test {

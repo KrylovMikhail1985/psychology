@@ -1,0 +1,21 @@
+DEFAULT_TIME:
+  - time: 0000-00-00 20:00:00
+  - time: 0000-00-00 10:00:00
+  - time: 0000-00-00 11:00:00
+  - time: 0000-00-00 12:00:00
+  - time: 0000-00-00 13:00:00
+  - time: 0000-00-00 14:00:00
+  - time: 0000-00-00 15:00:00
+PRODUCTS:
+  - product_name: "Терапия 1"
+    cost: 3000
+    duration: "2,5 часа"
+    description: "Описание терапии №1"
+    actual: true
+    priority: 4
+  - product_name: "Терапия 2"
+    cost: 3000
+    duration: "3,5 часа"
+    description: "Описание терапии №2"
+    actual: true
+    priority: 2

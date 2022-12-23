@@ -24,7 +24,7 @@ public class JwtTokenProvider {
     @Value("${jwt-token-expired}")
     private long livingTime;
 
-    public String createToken(String login, String password) {
+    public String createToken(String login) {
         Claims claims = Jwts.claims().setSubject(login);
 //        claims.put("roles", some_role)
         Date now = new Date();

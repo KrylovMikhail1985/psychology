@@ -69,13 +69,12 @@ public class AdminController {
         String token;
 
         if (userAndPasswordIsCorrect(login, password)) {
-            System.out.println("IF is working!");
-            token = jwtTokenProvider.createToken(login, password);
-
+            token = jwtTokenProvider.createToken(login);
             Cookie loginCookie = new Cookie("auth_token", token);
-            loginCookie.setMaxAge(30 * 5);
+            // living time in seconds
+            loginCookie.setMaxAge(60 * 60);
             response.addCookie(loginCookie);
-            return "redirect:" + "/admin";
+            return "admin.html";
         }
         return "admin_login.html";
     }
@@ -86,7 +85,7 @@ public class AdminController {
     }
 
     @PostMapping("/post_create_new_product")
-    public String createNewProduct(@Valid Product product, BindingResult bindingResult, Model model) {
+    public String createNewProduct(@Valid Product product, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "admin_new_product.html";
         }
@@ -282,35 +281,6 @@ public class AdminController {
     public String deleteDay(@PathVariable(name = "id") long id) {
         dayService.delete(id);
         return "redirect:" + "/admin/all_days";
-    }
-    @GetMapping("/test")
-    public String test(Model model) {
-        Date date = new Date(122, 11, 12);
-        System.out.println(date);
-//        Day day1 = new Day();
-//        Day day2 = new Day();
-//        Day day4 = new Day();
-//        Day day5 = new Day();
-//        Day day6 = new Day();
-//        List<Integer> month = new ArrayList<>();
-//        month.add(1);
-//        month.add(2);
-//        month.add(5);
-//        month.add(6);
-//        month.add(7);
-//        model.addAttribute(month);
-//        Month month = new Month();
-//        month.setD1(true);
-//        month.setD2(true);
-//        month.setD3(false);
-//        month.setD4(false);
-//        month.setD5(true);
-//        month.setD6(true);
-//        month.setD7(false);
-//        month.setMonth(11);
-//        month.setYear(122);
-//        model.addAttribute(month);
-        return "admin.html";
     }
     private  List<Day> utilCreateLocalDayList(List<Day> currentDayList, Date startDate) {
         List<Day> localDayList = new ArrayList<>();

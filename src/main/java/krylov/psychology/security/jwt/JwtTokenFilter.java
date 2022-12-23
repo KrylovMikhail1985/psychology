@@ -1,5 +1,6 @@
 package krylov.psychology.security.jwt;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -28,34 +29,28 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain chain)
             throws ServletException, IOException {
-        // Get authorization header and validate
-//        final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-//        if (isEmpty(header) || header.length() < 15) {
-//            chain.doFilter(request, response);
-//            return;
-//        }
-//
-//        // Get jwt token and validate
-//        String token;
-//        if (header.startsWith("Bearer")) {
-//            token = header.split(" ")[1].trim();
-//        } else {
-//            token = header.trim();
-//        }
-//        if (!jwtTokenProvider.tokenIsValid(token)) {
-//            chain.doFilter(request, response);
-//            return;
-//        }
+
+        String token = null;
+
+        // Get token from header
+        final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (header != null && header.startsWith("Bearer")) {
+            token = header.split(" ")[1].trim();
+        }
 
         // Get token from cookies
-        String token = "null";
         Cookie[] requestCookies = request.getCookies();
-        for (var i = 0; i < requestCookies.length; i++) {
+        int numberOfCookies = 0;
+        try {
+            numberOfCookies = requestCookies.length;
+        } catch (Exception e) { }
+        for (var i = 0; i < numberOfCookies; i++) {
             if (requestCookies[i].getName().equals("auth_token")) {
                 token = requestCookies[i].getValue();
             }
         }
-        if (token.equals("null")) {
+
+        if (token == null) {
             chain.doFilter(request, response);
             return;
         }

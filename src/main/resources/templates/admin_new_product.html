@@ -28,7 +28,7 @@
     <x th:if="${#fields.hasErrors('cost')}" th:errors="*{cost}">Error</x>
     <br/><br/>
     Длительность [мин]: <select type="text" th:field="*{duration}">
-        <option th:value="30 + ' ' + ммн">30 мин</option>
+        <option th:value="30 + ' ' + мин">30 мин</option>
         <option th:value="1 + ' ' + час">1 час</option>
         <option th:value="1 + ',' + 5 + ' ' + часа">1,5 часа</option>
         <option th:value="2 + ' ' + часа">2 часа</option>
