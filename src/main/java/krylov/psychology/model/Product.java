@@ -117,4 +117,13 @@ public class Product {
     public void setPriority(int priority) {
         this.priority = priority;
     }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "productName='" + productName + '\'' +
+                ", cost=" + cost +
+                ", duration='" + duration + '\'' +
+                '}';
+    }
 }

@@ -22,31 +22,25 @@
     |
     <a href="/admin/active_new_month?next=yes">Открыть запись на следующий месяц</a>
 </nav>
-<span th:if="${success} == 'Y'" id="disappear" >
-    Изменения успешно внесены!
-    <button onclick="hideText()">x</button>
-</span>
 <table>
     <tr>
         <th>Наименование</th>
         <th>Стоимость</th>
         <th>Продолжительность</th>
-        <th colspan="2">Актуальность</th>
+        <th>Актуальность</th>
         <th>Приоритет</th>
-<!--        <th>Подробнее</th>-->
-<!--        <th>Удаление</th>-->
+        <th>Подробнее</th>
+        <th>Удаление</th>
     </tr>
     <tr th:each="prod : ${listOfProducts}">
         <td th:text="${prod.productName}">Наименование продукта</td>
         <td th:text="${prod.cost}">1000</td>
         <td th:text="${prod.duration}">999</td>
-        <td th:text="${prod.actual}" >disabled</td>
-        <td><a th:href="active_product + '/' + ${prod.id}" class="button">переключить</a></td>
+        <td><a th:text="${prod.actual}" th:href="active_product + '/' + ${prod.id}">true</a></td>
         <td th:text="${prod.priority}">9</td>
         <td><a th:href="show_one_product + '/' + ${prod.id}" class="button">подробнее</a></td>
         <td><a th:href="delete_product + '/' + ${prod.id}" class="button">удалить</a></td>
     </tr>
 </table>
-<script src="/src/main/resources/static/script/disappear.js" th:src="@{../script/disappear.js}"></script>
 </body>
 </html>

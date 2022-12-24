@@ -25,19 +25,11 @@
 
 <table>
     <tr>
-        <th colspan="2">Перечень оказываемых услуг</th>
-<!--        <th>Стоимость</th>-->
-<!--        <th>Продолжительность</th>-->
-<!--        <th></th>-->
+        <th>Перечень оказываемых услуг</th>
     </tr>
     <tr th:each="prod : ${listOfProducts}">
-        <td th:text="${prod.productName}">Наименование продукта</td>
-<!--        <td th:text="${prod.cost}">1000</td>-->
-<!--        <td th:text="${prod.duration}">999</td>-->
-        <td>
-            <a th:href="'/' + product + '/' + ${prod.id}" class="button">подробнее</a>
-            <a th:href="'/' + record + '/' + ${prod.id}" class="button">записаться</a>
-        </td>
+        <td th:if="${prod.isActual}"><a th:text="${prod.productName}"
+               th:href="'/' + product + '/' + ${prod.id}" class="button">Наименование продукта</a></td>
     </tr>
 </table>
 

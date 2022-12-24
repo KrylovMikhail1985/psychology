@@ -9,4 +9,5 @@ import java.util.List;
 public interface DayTimeService {
     List<DayTime> createListOfDayTimesFromDefaultTime(Day day, List<DefaultTime> defaultTimeList);
     DayTime enableDisable(long id);
+    DayTime findById(long id);
 }

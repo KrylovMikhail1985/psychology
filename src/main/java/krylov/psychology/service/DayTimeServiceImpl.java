@@ -14,6 +14,12 @@ import java.util.List;
 public class DayTimeServiceImpl implements DayTimeService {
     @Autowired
     private DayTimeRepository dayTimeRepository;
+
+    @Override
+    public DayTime findById(long id) {
+        return dayTimeRepository.findById(id).orElseThrow();
+    }
+
     @Override
     public List<DayTime> createListOfDayTimesFromDefaultTime(Day day, List<DefaultTime> defaultTimeList) {
         List<DayTime> dayTimeList = new ArrayList<>();

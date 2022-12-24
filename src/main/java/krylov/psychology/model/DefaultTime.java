@@ -40,6 +40,9 @@ public class DefaultTime {
 
     @Override
     public String toString() {
+        if (time == null) {
+            return "There is no time in DefaultTime";
+        }
         return time.toString();
     }
 }

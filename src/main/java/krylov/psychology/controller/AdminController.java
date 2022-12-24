@@ -100,11 +100,7 @@ public class AdminController {
     }
 
     @GetMapping("/admin_all_products")
-    public String showAllProductsForAdmin(@RequestParam(name = "success", required = false) String success,
-                                          Model model) {
-        if (success != null && success.equalsIgnoreCase("yes")) {
-            model.addAttribute("success", 'Y');
-        }
+    public String showAllProductsForAdmin(Model model) {
         model.addAttribute("listOfProducts", productService.findAllProducts());
         return "admin_all_products.html";
     }
@@ -128,7 +124,7 @@ public class AdminController {
             return "admin_update_product.html";
         }
         productService.updateProduct(id, product);
-        return "redirect:" + "/admin/admin_all_products?success=yes";
+        return "redirect:" + "/admin/admin_all_products";
     }
 
     @GetMapping("/active_product/{id}")
@@ -140,12 +136,12 @@ public class AdminController {
             product.setActual(true);
         }
         productService.updateProduct(id, product);
-        return "redirect:" + "/admin/admin_all_products?success=yes";
+        return "redirect:" + "/admin/admin_all_products";
     }
     @GetMapping("delete_product/{id}")
     public String deleteProductGet(@PathVariable(name = "id") long id) {
         productService.deleteProduct(id);
-        return "redirect:" + "/admin/admin_all_products?success=yes";
+        return "redirect:" + "/admin/admin_all_products";
     }
 
     @GetMapping("/active_new_month")

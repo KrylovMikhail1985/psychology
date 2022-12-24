@@ -23,6 +23,7 @@ public class Therapy {
 
     @Column(name = "email")
     @Email
+    @NotBlank
     private String email;
 
     @Column(name = "name")
@@ -37,7 +38,7 @@ public class Therapy {
     @CreatedDate
     private Date createdAt;
 
-    @NotBlank
+
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;

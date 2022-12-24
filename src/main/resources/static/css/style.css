@@ -39,3 +39,7 @@ a.button {
   border-bottom: 1px solid #333333;
   border-left: 1px solid #CCCCCC;
 }
+.vertical-text {
+  writing-mode:tb-rl;
+  transform: rotate(180deg);
+}
