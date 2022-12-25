@@ -2,12 +2,13 @@ package krylov.psychology.service;
 
 import krylov.psychology.model.Product;
 
+import java.time.LocalTime;
 import java.util.List;
 
 public interface ProductService {
     Product createProduct(String productName,
                           int productCost,
-                          String productDuration,
+                          LocalTime productDuration,
                           String productDescription,
                           boolean actual,
                           int priority);

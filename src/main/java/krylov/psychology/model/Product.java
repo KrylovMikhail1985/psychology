@@ -10,6 +10,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -28,7 +30,8 @@ public class Product {
     private int cost;
 
     @Column(name = "duration")
-    private String duration;
+    @NotNull
+    private LocalTime duration;
     @Column(name = "description")
     @NotBlank
     private String description;
@@ -45,7 +48,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(String productName, int cost, String duration, String description, boolean actual, int priority) {
+    public Product(String productName, int cost, LocalTime duration, String description, boolean actual, int priority) {
         this.productName = productName;
         this.cost = cost;
         this.duration = duration;
@@ -70,11 +73,11 @@ public class Product {
         this.productName = productName;
     }
 
-    public String getDuration() {
+    public LocalTime getDuration() {
         return duration;
     }
 
-    public void setDuration(String duration) {
+    public void setDuration(LocalTime duration) {
         this.duration = duration;
     }
 
