@@ -275,8 +275,9 @@ public class AdminController {
     public String activateDayTime(@PathVariable(name = "id") long dayTimeId,
                                   @PathVariable(name = "longDate") long longDate,
                                   Model model) {
-        if (thereIsNoTherapyInThisTime(dayTimeId))
-        dayTimeService.enableDisable(dayTimeId);
+        if (thereIsNoTherapyInThisTime(dayTimeId)) {
+            dayTimeService.enableDisable(dayTimeId);
+        }
         return "redirect:" + "/admin/admin_one_day/" + longDate;
     }
     @PostMapping("post_create_new_day")
@@ -288,8 +289,8 @@ public class AdminController {
     @GetMapping("delete_day/{id}")
     public String deleteDay(@PathVariable(name = "id") long id) {
         Day day = dayService.findById(id);
-        for(DayTime dayTime: day.getDayTimes()) {
-            if(!dayTime.isTimeIsFree()) {
+        for (DayTime dayTime: day.getDayTimes()) {
+            if (!dayTime.isTimeIsFree()) {
                 return "redirect:" + "/admin/all_days";
             }
         }
