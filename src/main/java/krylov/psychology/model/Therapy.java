@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -42,6 +43,9 @@ public class Therapy {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
+    @OneToOne
+    @JoinColumn(name = "day_time_id")
+    private DayTime dayTime;
 
     public Therapy() {
     }
@@ -98,5 +102,25 @@ public class Therapy {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public DayTime getDayTime() {
+        return dayTime;
+    }
+
+    public void setDayTime(DayTime dayTime) {
+        this.dayTime = dayTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Therapy{" +
+                "email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", createdAt=" + createdAt +
+                ", product=" + product +
+                ", dayTime=" + dayTime +
+                '}';
     }
 }

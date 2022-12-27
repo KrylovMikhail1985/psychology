@@ -43,3 +43,6 @@ a.button {
   writing-mode:tb-rl;
   transform: rotate(180deg);
 }
+.gray {
+  color: gray
+}

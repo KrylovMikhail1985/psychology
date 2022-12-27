@@ -4,6 +4,7 @@ import krylov.psychology.model.Day;
 import krylov.psychology.model.DayTime;
 import krylov.psychology.model.DefaultTime;
 import krylov.psychology.model.Product;
+import krylov.psychology.model.Therapy;
 import krylov.psychology.security.jwt.JwtTokenProvider;
 import krylov.psychology.service.DayServiceImpl;
 import krylov.psychology.service.DayTimeServiceImpl;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.time.LocalTime;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,7 +54,7 @@ public class AdminController {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
-    private final long day = 86400000;
+    private final long dayInt = 86400000;
 
     @GetMapping("")
     public String admin() {
@@ -253,6 +255,15 @@ public class AdminController {
             List<DayTime> dayTimeList = day.getDayTimes();
             model.addAttribute("day", day);
             model.addAttribute("dayTimeList", dayTimeList);
+            boolean thereIsNoTherapyThisDay = true;
+            for (DayTime dayTime: dayTimeList) {
+                Therapy therapy = dayTime.getTherapy();
+                if (therapy != null) {
+                    thereIsNoTherapyThisDay = false;
+                    break;
+                }
+            }
+            model.addAttribute("thereIsNoTherapyThisDay", thereIsNoTherapyThisDay);
             return "admin_one_day.html";
         } catch (Exception e) {
             model.addAttribute("dataTimeLong", new Date(dataTimeLong));
@@ -261,10 +272,11 @@ public class AdminController {
         }
     }
     @GetMapping("daytime_active/{id}/{longDate}")
-    public String activateDayTime(@PathVariable(name = "id") long id,
+    public String activateDayTime(@PathVariable(name = "id") long dayTimeId,
                                   @PathVariable(name = "longDate") long longDate,
                                   Model model) {
-        dayTimeService.enableDisable(id);
+        if (thereIsNoTherapyInThisTime(dayTimeId))
+        dayTimeService.enableDisable(dayTimeId);
         return "redirect:" + "/admin/admin_one_day/" + longDate;
     }
     @PostMapping("post_create_new_day")
@@ -275,13 +287,34 @@ public class AdminController {
     }
     @GetMapping("delete_day/{id}")
     public String deleteDay(@PathVariable(name = "id") long id) {
+        Day day = dayService.findById(id);
+        for(DayTime dayTime: day.getDayTimes()) {
+            if(!dayTime.isTimeIsFree()) {
+                return "redirect:" + "/admin/all_days";
+            }
+        }
         dayService.delete(id);
         return "redirect:" + "/admin/all_days";
     }
+    @GetMapping("one_therapy/{dayTimeId}")
+    public String onrTherapy(@PathVariable(name = "dayTimeId") long dayTimeId,
+                             Model model) {
+        DayTime dayTime = dayTimeService.findById(dayTimeId);
+        Therapy therapy = dayTime.getTherapy();
+        Product product = therapy.getProduct();
+        Day day = dayTime.getDay();
+        model.addAttribute("day", day);
+        model.addAttribute("dayTime", dayTime);
+        model.addAttribute("product", product);
+        model.addAttribute("therapy", therapy);
+
+        return "admin_therapy.html";
+    }
+
     private  List<Day> utilCreateLocalDayList(List<Day> currentDayList, Date startDate) {
         List<Day> localDayList = new ArrayList<>();
         for (var i = 0; i < 5; i++) {
-            Date newDate = new Date(startDate.getTime() + day * i);
+            Date newDate = new Date(startDate.getTime() + dayInt * i);
             Day newDay = new Day(newDate);
             for (Day day: currentDayList) {
                 if (day.getDate().getTime() == newDate.getTime()) {
@@ -321,5 +354,29 @@ public class AdminController {
             System.out.println("User or password is not correct!");
             return false;
         }
+    }
+    private boolean thereIsNoTherapyInThisTime(Long dayTimeId) {
+        DayTime dayTime = dayTimeService.findById(dayTimeId);
+        LocalTime localTime = dayTime.getLocalTime();
+        Day day = dayTime.getDay();
+
+        List<Therapy> therapyList = new ArrayList<>();
+        for (DayTime time: day.getDayTimes()) {
+            Therapy therapy = time.getTherapy();
+            if (therapy != null) {
+                therapyList.add(therapy);
+            }
+        }
+
+        for (Therapy therapy: therapyList) {
+            LocalTime starTherapy = therapy.getDayTime().getLocalTime();
+            LocalTime duration = therapy.getProduct().getDuration();
+            LocalTime endTherapy = starTherapy.plusHours(duration.getHour()).plusMinutes(duration.getMinute());
+            if ((localTime.isAfter(starTherapy) || localTime.equals(starTherapy))
+                    && (localTime.isBefore(endTherapy) || localTime.equals(endTherapy))) {
+                return false;
+            }
+        }
+        return true;
     }
 }

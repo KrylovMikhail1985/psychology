@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.time.LocalTime;
@@ -25,6 +26,8 @@ public class DayTime {
     @ManyToOne
     @JoinColumn(name = "day_id")
     private Day day;
+    @OneToOne(mappedBy = "dayTime")
+    private Therapy therapy;
 
     public DayTime() {
     }
@@ -59,6 +62,14 @@ public class DayTime {
 
     public void setDay(Day day) {
         this.day = day;
+    }
+
+    public Therapy getTherapy() {
+        return therapy;
+    }
+
+    public void setTherapy(Therapy therapy) {
+        this.therapy = therapy;
     }
 
     @Override

@@ -1,0 +1,25 @@
+databaseChangeLog:
+- changeSet:
+    id: 1671964618954-1
+    author: mikhailkrylov (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: day_time_id
+            type: bigint
+        tableName: therapies
+- changeSet:
+    id: 1671964618954-2
+    author: mikhailkrylov (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: day_time_id
+        baseTableName: therapies
+        constraintName: FKkv9tk11mt2c2gg9rbweetvjxk
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: day_times
+        validate: true
+

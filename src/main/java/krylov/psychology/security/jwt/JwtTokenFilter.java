@@ -54,6 +54,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             chain.doFilter(request, response);
             return;
         }
+        if (!jwtTokenProvider.tokenIsValid(token)) {
+            chain.doFilter(request, response);
+            return;
+        }
 
         // Get user identity and set it on the spring security context
         UsernamePasswordAuthenticationToken authentication =

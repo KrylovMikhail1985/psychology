@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en" xmlns:th=”http://www.thymeleaf.org”>
+<link rel="stylesheet" type="text/css" href="/src/main/resources/static/css/style.css" th:href="@{/css/style.css}"/>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>success</title>
+</head>
+<nav>
+    <a href="/">Главная</a>
+    |
+    <a href="/all_therapies">Перечень предлагаемых услуг</a>
+</nav>
+<body>
+<h2><x th:text="${product.productName}">Название терапии</x></h2>
+<div><strong>Стоимость: </strong><x th:text="${product.cost}">3000</x> руб</div>
+<div><strong>Продолжительность: </strong><x th:text="${product.duration}">1 час 30 мин</x></div>
+<div>Дени и время записи</div>
+<strong th:text="${#dates.format(day.getDate(), 'EEEE dd.MM.yyyy')}">23.11.2022</strong>
+<span>в</span>
+<strong th:text="${dayTime.getLocalTime()}">11:00</strong>
+<h3>Вы успешно записаны!</h3>
+</body>
+</html>

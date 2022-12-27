@@ -42,4 +42,11 @@ public class DayTimeServiceImpl implements DayTimeService {
         }
         return dayTimeRepository.save(dayTime);
     }
+
+    @Override
+    public DayTime disable(long id) {
+        DayTime dayTime = dayTimeRepository.findById(id).orElseThrow();
+        dayTime.setTimeIsFree(false);
+        return dayTimeRepository.save(dayTime);
+    }
 }

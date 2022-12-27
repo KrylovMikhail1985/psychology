@@ -15,5 +15,5 @@ adminName: KrylovaDi
 
 jwt-token-secret: ${JWT-SECRET:lkrfslrekjfalecmasieuro3wurhnsjkcafjsefljashkfaewjkfljsrhkjgjsfndjtgtdlgjsghsjdyr}
 # 3600000 - 1 hour
-jwt-token-expired: 1800000
+jwt-token-expired: 3600000
 

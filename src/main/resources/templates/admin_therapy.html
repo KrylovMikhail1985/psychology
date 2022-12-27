@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en" xmlns:th=”http://www.thymeleaf.org”>
+<link rel="stylesheet" type="text/css" href="/src/main/resources/static/css/style.css" th:href="@{/css/style.css}"/>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>настройка терапии</title>
+</head>
+<nav>
+    <a href="/">Главная</a>
+    |
+    <a href="/admin">admin</a>
+</nav>
+<body>
+<div>День и время записи:</div>
+<strong th:text="${#dates.format(day.getDate(), 'EEEE dd.MM.yyyy')}">23.11.2022</strong>
+<span>в</span>
+<strong th:text="${dayTime.getLocalTime()}">11:00</strong>
+<br/>
+Имя: <strong th:text="${therapy.name}">Имя</strong>
+<br/>
+Email: <strong th:text="${therapy.email}">Email@mail.com</strong>
+<br/>
+телефон: <strong th:text="${therapy.phoneNumber}">8(123)456-56-56</strong>
+<!--<br/>-->
+<!--дата записи: <strong th:text="${therapy.createdAt}">12.08.23 11:45</strong>-->
+<br/>
+продукт: <strong th:text="${product.productName}">Название терапии</strong>
+<br/>
+длительность: <strong th:text="${product.duration}">02:30</strong>
+<br/>
+стоимость: <strong th:text="${product.cost}">02:30</strong>
+</body>
+</html>

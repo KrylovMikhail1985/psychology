@@ -24,7 +24,6 @@
 </nav>
 
 <h3 th:text="${#dates.format(day.getDate(), 'EEEE dd.MM.yyyy')}"> 23.11.1985</h3>
-<h2 style="background-color: red">Нужно отключить диактивацию/активацию при наличии записи на это время</h2>
 <table>
     <thead>
         <th>время</th>
@@ -36,10 +35,12 @@
         <td><a th:text="${dayTime.timeIsFree}"
                th:href="'/' + admin + '/' + daytime_active + '/'
                + ${dayTime.id} + '/' + ${day.getDate().getTime()}">true</a></td>
-        <td>information</td>
+        <td th:if="${dayTime.getTherapy()} != null"><a th:href="'/' + admin + '/' + one_therapy + '/' + ${dayTime.id}">терапия</a></td>
+        <td th:if="${dayTime.getTherapy()} == null"></td>
     </tr>
 </table>
-<a class="button" th:href="'/' + admin + '/' + delete_day + '/' + ${day.getId()}">удалить день</a>
-<h3 style="background-color: red">сделать удаление только для пустых дней</h3>
+<br>
+<a th:if="${thereIsNoTherapyThisDay}" class="button"
+   th:href="'/' + admin + '/' + delete_day + '/' + ${day.getId()}">удалить день</a>
 </body>
 </html>

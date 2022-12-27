@@ -62,13 +62,14 @@ public class JwtTokenProvider {
                             .parseClaimsJws(token)
                             .getBody();
             if (claimsJwt.getExpiration().before(new Date())) {
-                System.out.println("Token NOT valid anymore!");
+                System.out.println("Token is NOT valid anymore!");
                 return false;
             }
             System.out.println("Token is valid.");
             return true;
         } catch (JwtException | IllegalArgumentException e) {
-            throw new JwtAuthenticationException("JwtTokenProvider tokenIsValid error");
+            return false;
+//            throw new JwtAuthenticationException("JwtTokenProvider tokenIsValid error");
         }
     }
 }
