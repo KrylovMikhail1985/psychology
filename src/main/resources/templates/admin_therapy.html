@@ -33,4 +33,15 @@ Email: <strong th:text="${therapy.email}">Email@mail.com</strong>
 <br/>
 стоимость: <strong th:text="${product.cost}">02:30</strong>
 </body>
+<br>
+<a th:href="'/' + admin + '/' + transfer_therapy + '/' + ${therapy.id}" class="button">перенести запись</a>
+<form th:action="'/' + admin + '/' + delete_therapy + '/' + ${therapy.id} + '/' + ${day.getDate().getTime()}">
+    <input type="radio" name="y">Я уверена
+    <br>
+    <input type="radio" name="e">что хочу удалить
+    <br>
+    <input type="radio" name="s">эту запись!
+    <br>
+    <input type="submit" value="Удалить">
+</form>
 </html>

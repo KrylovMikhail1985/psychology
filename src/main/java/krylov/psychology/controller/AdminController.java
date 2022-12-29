@@ -10,6 +10,8 @@ import krylov.psychology.service.DayServiceImpl;
 import krylov.psychology.service.DayTimeServiceImpl;
 import krylov.psychology.service.DefaultTimeServiceImpl;
 import krylov.psychology.service.ProductServiceImpl;
+import krylov.psychology.service.TherapyServiceImpl;
+import krylov.psychology.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,7 +30,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.time.LocalTime;
-import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -53,6 +54,8 @@ public class AdminController {
     private DayTimeServiceImpl dayTimeService;
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
+    @Autowired
+    private TherapyServiceImpl therapyService;
 
     private final long dayInt = 86400000;
 
@@ -164,7 +167,7 @@ public class AdminController {
         date = new Date(year, month, dateDate);
         model.addAttribute("month", month);
         model.addAttribute("year", year);
-        model.addAttribute("countOfDays", utilCountOfDaysInMonth(date));
+        model.addAttribute("countOfDays", Util.countOfDaysInMonth(date));
         return "admin_new_month.html";
     }
     @PostMapping("/active_new_month")
@@ -185,7 +188,7 @@ public class AdminController {
 
         // find all created dates
         List<Day> allCreatedDaysAfterToday = dayService.findAllDayFromDate(new Date());
-        List<Date> dateList = findAllDateFromDays(allCreatedDaysAfterToday);
+        List<Date> dateList = Util.findAllDateFromDays(allCreatedDaysAfterToday);
 
         // create every new day
         List<DefaultTime> defaultTimeList = defaultTimeService.findAllDefaultTimeSortedByTime();
@@ -236,7 +239,7 @@ public class AdminController {
         Date lastDate = new Date(today.getYear(), today.getMonth(), today.getDate() + 5 + week);
 
         List<Day> listFromDB = dayService.findAllDayInPeriod(firstDate, lastDate);
-        List<Day> localDayList = utilCreateLocalDayList(listFromDB, firstDate);
+        List<Day> localDayList = Util.createLocalDayList(listFromDB, firstDate);
 //        model.addAttribute("listOfDays", localDayList);
         model.addAttribute("d1", localDayList.get(0));
         model.addAttribute("d2", localDayList.get(1));
@@ -275,15 +278,21 @@ public class AdminController {
     public String activateDayTime(@PathVariable(name = "id") long dayTimeId,
                                   @PathVariable(name = "longDate") long longDate,
                                   Model model) {
-        if (thereIsNoTherapyInThisTime(dayTimeId)) {
+        DayTime dayTime = dayTimeService.findById(dayTimeId);
+        if (Util.thereIsNoTherapyInThisTime(dayTime)) {
             dayTimeService.enableDisable(dayTimeId);
         }
         return "redirect:" + "/admin/admin_one_day/" + longDate;
     }
     @PostMapping("post_create_new_day")
     public String createNewDay(@RequestParam(name = "dataTime") long longDate) {
+
         List<DefaultTime> defaultTimeList = defaultTimeService.findAllDefaultTimeSortedByTime();
-        utilCreateNewDay(new Date(longDate), defaultTimeList);
+        Day day = new Day();
+        day.setDate(new Date(longDate));
+        List<DayTime> dayTimeList = dayTimeService.createListOfDayTimesFromDefaultTime(day, defaultTimeList);
+        day.setDayTimes(dayTimeList);
+        dayService.create(day);
         return "redirect:" + "/admin/admin_one_day/" + longDate;
     }
     @GetMapping("delete_day/{id}")
@@ -311,43 +320,122 @@ public class AdminController {
 
         return "admin_therapy.html";
     }
+    @GetMapping("delete_therapy/{therapyId}/{dayLong}")
+    public String deleteTherapy(@PathVariable(name = "therapyId") long therapyId,
+                                 @PathVariable(name = "dayLong") long dayLong,
+                                 @RequestParam(name = "y", required = false) String  y,
+                                 @RequestParam(name = "e", required = false) String  e,
+                                 @RequestParam(name = "s", required = false) String  s) {
+        if (y != null && e != null && s != null) {
+            Day day = dayService.findDayByDate(new Date(dayLong));
+            Therapy therapy = therapyService.findById(therapyId);
+            LocalTime localTimeTherapy = therapy.getDayTime().getLocalTime();
+            Day dayFromDelTherapy =
+                    Util.thisDayWithActivatedDayTime(day, localTimeTherapy, therapy.getProduct().getDuration());
+            dayService.update(dayFromDelTherapy.getId(), dayFromDelTherapy);
+            therapyService.deleteById(therapyId);
+        }
+        return "redirect:" + "/admin/admin_one_day/" + dayLong;
+    }
+    @GetMapping("transfer_therapy/{therapyId}")
+    public String transferTherapy(@PathVariable(name = "therapyId") long therapyId,
+                                  @RequestParam(name = "week", required = false) Integer week,
+                                  Model model) {
+        if (week == null || week < 0) {
+            week = 0;
+        }
 
-    private  List<Day> utilCreateLocalDayList(List<Day> currentDayList, Date startDate) {
-        List<Day> localDayList = new ArrayList<>();
-        for (var i = 0; i < 5; i++) {
-            Date newDate = new Date(startDate.getTime() + dayInt * i);
-            Day newDay = new Day(newDate);
-            for (Day day: currentDayList) {
-                if (day.getDate().getTime() == newDate.getTime()) {
-                    newDay = day;
-                }
-            }
-            localDayList.add(newDay);
-        }
-        return localDayList;
+        Therapy therapy = therapyService.findById(therapyId);
+        Product product = therapy.getProduct();
+        model.addAttribute("therapy", therapy);
+        model.addAttribute("product", product);
+
+        Date today = new Date();
+        Date tomorrow = new Date(today.getTime() + dayInt);
+        Date firstDate = new Date(tomorrow.getYear(), tomorrow.getMonth(), tomorrow.getDate() + week);
+        Date lastDate = new Date(tomorrow.getYear(), tomorrow.getMonth(), tomorrow.getDate() + 5 + week);
+
+        List<Day> listFromDB = dayService.findAllDayInPeriod(firstDate, lastDate);
+        List<Day> listWithFitTime = Util.disableNotFitTime(listFromDB, product.getDuration());
+        List<Day> localDayList = Util.createLocalDayList(listWithFitTime, firstDate);
+
+        model.addAttribute("d1", localDayList.get(0));
+        model.addAttribute("d2", localDayList.get(1));
+        model.addAttribute("d3", localDayList.get(2));
+        model.addAttribute("d4", localDayList.get(3));
+        model.addAttribute("d5", localDayList.get(4));
+        model.addAttribute("before", week - 5);
+        model.addAttribute("after", week + 5);
+        return "admin_transfer_therapy.html";
     }
-    private Day utilCreateNewDay(Date date, List<DefaultTime> defaultTimeList) {
-        Day day = new Day();
-        day.setDate(date);
-        List<DayTime> dayTimeList = dayTimeService.createListOfDayTimesFromDefaultTime(day, defaultTimeList);
-        day.setDayTimes(dayTimeList);
-        return dayService.create(day);
+    @GetMapping("transfer/{therapyId}/{dayTimeId}")
+    public String transferTherapyConfirm(@PathVariable(name = "therapyId") long therapyId,
+                                         @PathVariable(name = "dayTimeId") long dayTimeId,
+                                         Model model) {
+        Therapy therapy = therapyService.findById(therapyId);
+        DayTime dayTime = dayTimeService.findById(dayTimeId);
+        long oldDayLong = therapy.getDayTime().getDay().getDate().getTime();
+
+        //create new therapy
+        Therapy newTherapy = new Therapy(therapy.getEmail(), therapy.getName(), therapy.getPhoneNumber());
+        newTherapy.setProduct(therapy.getProduct());
+        newTherapy.setDayTime(dayTime);
+
+        //occupy time in the day and write therapy
+        Day thisDayDeactivatedTime = Util.thisDayWithDeactivatedDayTimeIfNoTherapy(
+                        dayTime.getDay(),
+                        dayTime.getLocalTime(),
+                        therapy.getProduct().getDuration());
+        dayService.update(thisDayDeactivatedTime.getId(), thisDayDeactivatedTime);
+        therapyService.createTherapy(newTherapy);
+
+        //delete old therapy
+        Day day = therapy.getDayTime().getDay();
+        LocalTime localTimeTherapy = therapy.getDayTime().getLocalTime();
+        Day dayFromDelTherapy =
+                Util.thisDayWithActivatedDayTime(day, localTimeTherapy, therapy.getProduct().getDuration());
+        dayService.update(dayFromDelTherapy.getId(), dayFromDelTherapy);
+        therapyService.deleteById(therapyId);
+
+        return "redirect:" + "/admin/admin_one_day/" + oldDayLong;
     }
-    private int utilCountOfDaysInMonth(Date date) {
-        final int year1900 = 1900;
-        final int one = 1;
-        int year = date.getYear() + year1900;
-        int month = date.getMonth() + one;
-        YearMonth yearMonthObject = YearMonth.of(year, month);
-        return yearMonthObject.lengthOfMonth();
-    }
-    private List<Date> findAllDateFromDays(List<Day> dayList) {
-        List<Date> dateList = new ArrayList<>();
-        for (Day day: dayList) {
-            dateList.add(day.getDate());
-        }
-        return dateList;
-    }
+
+//    private  List<Day> utilCreateLocalDayList(List<Day> currentDayList, Date startDate) {
+//        List<Day> localDayList = new ArrayList<>();
+//        for (var i = 0; i < 5; i++) {
+//            Date newDate = new Date(startDate.getTime() + dayInt * i);
+//            Day newDay = new Day(newDate);
+//            for (Day day: currentDayList) {
+//                if (day.getDate().getTime() == newDate.getTime()) {
+//                    newDay = day;
+//                }
+//            }
+//            localDayList.add(newDay);
+//        }
+//        return localDayList;
+//    }
+//    private Day utilCreateNewDay(Date date, List<DefaultTime> defaultTimeList) {
+//        Day day = new Day();
+//        day.setDate(date);
+//        List<DayTime> dayTimeList = dayTimeService.createListOfDayTimesFromDefaultTime(day, defaultTimeList);
+//        day.setDayTimes(dayTimeList);
+//        return dayService.create(day);
+//    }
+//    private int utilCountOfDaysInMonth(Date date) {
+//        final int year1900 = 1900;
+//        final int one = 1;
+//        int year = date.getYear() + year1900;
+//        int month = date.getMonth() + one;
+//        YearMonth yearMonthObject = YearMonth.of(year, month);
+//        return yearMonthObject.lengthOfMonth();
+//    }
+//    private List<Date> findAllDateFromDays(List<Day> dayList) {
+//        List<Date> dateList = new ArrayList<>();
+//        for (Day day: dayList) {
+//            dateList.add(day.getDate());
+//        }
+//        return dateList;
+//    }
     private boolean userAndPasswordIsCorrect(String userName, String password) {
         if (userName.equals(adminName) && encoder.matches(password, adminPassword)) {
             return true;
@@ -356,28 +444,38 @@ public class AdminController {
             return false;
         }
     }
-    private boolean thereIsNoTherapyInThisTime(Long dayTimeId) {
-        DayTime dayTime = dayTimeService.findById(dayTimeId);
-        LocalTime localTime = dayTime.getLocalTime();
-        Day day = dayTime.getDay();
-
-        List<Therapy> therapyList = new ArrayList<>();
-        for (DayTime time: day.getDayTimes()) {
-            Therapy therapy = time.getTherapy();
-            if (therapy != null) {
-                therapyList.add(therapy);
-            }
-        }
-
-        for (Therapy therapy: therapyList) {
-            LocalTime starTherapy = therapy.getDayTime().getLocalTime();
-            LocalTime duration = therapy.getProduct().getDuration();
-            LocalTime endTherapy = starTherapy.plusHours(duration.getHour()).plusMinutes(duration.getMinute());
-            if ((localTime.isAfter(starTherapy) || localTime.equals(starTherapy))
-                    && (localTime.isBefore(endTherapy) || localTime.equals(endTherapy))) {
-                return false;
-            }
-        }
-        return true;
-    }
+//    private boolean thereIsNoTherapyInThisTime(DayTime dayTime) {
+//        LocalTime localTime = dayTime.getLocalTime();
+//        Day day = dayTime.getDay();
+//
+//        List<Therapy> therapyList = new ArrayList<>();
+//        for (DayTime time: day.getDayTimes()) {
+//            Therapy therapy = time.getTherapy();
+//            if (therapy != null) {
+//                therapyList.add(therapy);
+//            }
+//        }
+//
+//        for (Therapy therapy: therapyList) {
+//            LocalTime starTherapy = therapy.getDayTime().getLocalTime();
+//            LocalTime duration = therapy.getProduct().getDuration();
+//            LocalTime endTherapy = starTherapy.plusHours(duration.getHour()).plusMinutes(duration.getMinute());
+//            if ((localTime.isAfter(starTherapy) || localTime.equals(starTherapy))
+//                    && (localTime.isBefore(endTherapy) || localTime.equals(endTherapy))) {
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
+//    private Day activateDayTimeInTheDay(Day day, LocalTime startOfTherapy, LocalTime duration) {
+//        LocalTime endOfTherapy = startOfTherapy.plusHours(duration.getHour()).plusMinutes(duration.getMinute());
+//        for (DayTime dayTime: day.getDayTimes()) {
+//            LocalTime time = dayTime.getLocalTime();
+//            if ((time.isAfter(startOfTherapy) || time.equals(startOfTherapy)) &&
+//                    (time.isBefore(endOfTherapy) || time.equals(endOfTherapy))) {
+//                dayTime.setTimeIsFree(true);
+//            }
+//        }
+//        return day;
+//    }
 }

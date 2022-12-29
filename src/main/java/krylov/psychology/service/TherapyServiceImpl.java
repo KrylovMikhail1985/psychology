@@ -13,4 +13,14 @@ public class TherapyServiceImpl implements TherapyService {
     public Therapy createTherapy(Therapy therapy) {
         return therapyRepository.save(therapy);
     }
+
+    @Override
+    public Therapy findById(long id) {
+        return therapyRepository.findById(id).orElseThrow();
+    }
+
+    @Override
+    public void deleteById(long id) {
+        therapyRepository.deleteById(id);
+    }
 }

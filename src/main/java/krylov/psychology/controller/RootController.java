@@ -8,6 +8,7 @@ import krylov.psychology.service.DayServiceImpl;
 import krylov.psychology.service.DayTimeServiceImpl;
 import krylov.psychology.service.ProductServiceImpl;
 import krylov.psychology.service.TherapyServiceImpl;
+import krylov.psychology.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,8 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
-import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -54,14 +53,15 @@ public class RootController {
         if (week == null || week < 0) {
             week = 0;
         }
+
         Date today = new Date();
         Date tomorrow = new Date(today.getTime() + dayInt);
         Date firstDate = new Date(tomorrow.getYear(), tomorrow.getMonth(), tomorrow.getDate() + week);
         Date lastDate = new Date(tomorrow.getYear(), tomorrow.getMonth(), tomorrow.getDate() + 5 + week);
 
         List<Day> listFromDB = dayService.findAllDayInPeriod(firstDate, lastDate);
-        List<Day> listWithFitTime = utilDisableNotFitTime(listFromDB, product.getDuration());
-        List<Day> localDayList = utilCreateLocalDayList(listWithFitTime, firstDate);
+        List<Day> listWithFitTime = Util.disableNotFitTime(listFromDB, product.getDuration());
+        List<Day> localDayList = Util.createLocalDayList(listWithFitTime, firstDate);
 
         model.addAttribute("d1", localDayList.get(0));
         model.addAttribute("d2", localDayList.get(1));
@@ -100,7 +100,10 @@ public class RootController {
         if (bindingResult.hasErrors()) {
             return "recording_on_therapy_client.html";
         }
-        utilDeactivateDayTimeInTheDay(day, dayTime.getLocalTime(), product.getDuration());
+        Day thisDayDeactivatedTime =
+                Util.thisDayWithDeactivatedDayTimeIfNoTherapy(day, dayTime.getLocalTime(), product.getDuration());
+        dayService.update(thisDayDeactivatedTime.getId(), thisDayDeactivatedTime);
+
         therapy.setProduct(product);
         therapy.setDayTime(dayTime);
         therapy.setCreatedAt(new Date());
@@ -116,65 +119,63 @@ public class RootController {
         System.out.println(tomorrow);
         return "index.html";
     }
-
-
-    private  List<Day> utilCreateLocalDayList(List<Day> currentDayList, Date startDate) {
-        List<Day> localDayList = new ArrayList<>();
-        for (var i = 0; i < 5; i++) {
-            Date newDate = new Date(startDate.getTime() + dayInt * i);
-            Day newDay = new Day(newDate);
-            for (Day day: currentDayList) {
-                if (day.getDate().getTime() == newDate.getTime()) {
-                    newDay = day;
-                }
-            }
-            localDayList.add(newDay);
-        }
-        return localDayList;
-    }
-    private List<Day> utilDisableNotFitTime(List<Day> dayList, LocalTime duration) {
-        for (Day day: dayList) {
-            List<DayTime> dayTimeList = day.getDayTimes();
-            for (DayTime dayTime: dayTimeList) {
-                LocalTime startTherapy = dayTime.getLocalTime();
-                LocalTime endTherapy = startTherapy.plusHours(duration.getHour()).plusMinutes(duration.getMinute());
-                if (utilWeHaveFalse(dayTimeList, startTherapy, endTherapy)) {
-                    dayTime.setTimeIsFree(false);
-                }
-            }
-        }
-        return dayList;
-    }
-    private boolean utilWeHaveFalse(List<DayTime> dayTimeList, LocalTime startTime, LocalTime endTime) {
-        for (DayTime dayTime: dayTimeList) {
-            LocalTime time = dayTime.getLocalTime();
-            if ((time.isAfter(startTime) || time.equals(startTime)) &&
-                    (time.isBefore(endTime) || time.equals(endTime)) &&
-                    !dayTime.isTimeIsFree()) {
-                return true;
-            }
-        }
-        return false;
-    }
-    private void utilDeactivateDayTimeInTheDay(Day day, LocalTime startOfTherapy, LocalTime duration) {
-        LocalTime endOfTherapy = startOfTherapy.plusHours(duration.getHour()).plusMinutes(duration.getMinute());
-        for (DayTime dayTime: day.getDayTimes()) {
-            LocalTime time = dayTime.getLocalTime();
-            if ((time.isAfter(startOfTherapy) || time.equals(startOfTherapy))
-                    && (time.isBefore(endOfTherapy) || time.equals(endOfTherapy))
-                    && !dayTime.isTimeIsFree()) {
-                System.out.println("Time: " + time + " is not active");
-                throw new RuntimeException("Time: " + time + " is not active");
-            }
-        }
-
-        for (DayTime dayTime: day.getDayTimes()) {
-            LocalTime time = dayTime.getLocalTime();
-            if ((time.isAfter(startOfTherapy) || time.equals(startOfTherapy)) &&
-                    (time.isBefore(endOfTherapy) || time.equals(endOfTherapy))) {
-                dayTime.setTimeIsFree(false);
-            }
-        }
-        dayService.update(day.getId(), day);
-    }
+//    private  List<Day> utilCreateLocalDayList(List<Day> currentDayList, Date startDate) {
+//        List<Day> localDayList = new ArrayList<>();
+//        for (var i = 0; i < 5; i++) {
+//            Date newDate = new Date(startDate.getTime() + dayInt * i);
+//            Day newDay = new Day(newDate);
+//            for (Day day: currentDayList) {
+//                if (day.getDate().getTime() == newDate.getTime()) {
+//                    newDay = day;
+//                }
+//            }
+//            localDayList.add(newDay);
+//        }
+//        return localDayList;
+//    }
+//    private List<Day> utilDisableNotFitTime(List<Day> dayList, LocalTime duration) {
+//        for (Day day: dayList) {
+//            List<DayTime> dayTimeList = day.getDayTimes();
+//            for (DayTime dayTime: dayTimeList) {
+//                LocalTime startTherapy = dayTime.getLocalTime();
+//                LocalTime endTherapy = startTherapy.plusHours(duration.getHour()).plusMinutes(duration.getMinute());
+//                if (utilWeHaveFalse(dayTimeList, startTherapy, endTherapy)) {
+//                    dayTime.setTimeIsFree(false);
+//                }
+//            }
+//        }
+//        return dayList;
+//    }
+//    private boolean utilWeHaveFalse(List<DayTime> dayTimeList, LocalTime startTime, LocalTime endTime) {
+//        for (DayTime dayTime: dayTimeList) {
+//            LocalTime time = dayTime.getLocalTime();
+//            if ((time.isAfter(startTime) || time.equals(startTime)) &&
+//                    (time.isBefore(endTime) || time.equals(endTime)) &&
+//                    !dayTime.isTimeIsFree()) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+//    private Day thisDayWithDeactivatedDayTime(Day day, LocalTime startOfTherapy, LocalTime duration) {
+//        LocalTime endOfTherapy = startOfTherapy.plusHours(duration.getHour()).plusMinutes(duration.getMinute());
+//        for (DayTime dayTime: day.getDayTimes()) {
+//            LocalTime time = dayTime.getLocalTime();
+//            if ((time.isAfter(startOfTherapy) || time.equals(startOfTherapy))
+//                    && (time.isBefore(endOfTherapy) || time.equals(endOfTherapy))
+//                    && !dayTime.isTimeIsFree()) {
+//                System.out.println("Time: " + time + " is not active");
+//                throw new RuntimeException("Time: " + time + " is not active");
+//            }
+//        }
+//
+//        for (DayTime dayTime: day.getDayTimes()) {
+//            LocalTime time = dayTime.getLocalTime();
+//            if ((time.isAfter(startOfTherapy) || time.equals(startOfTherapy)) &&
+//                    (time.isBefore(endOfTherapy) || time.equals(endOfTherapy))) {
+//                dayTime.setTimeIsFree(false);
+//            }
+//        }
+//        return day;
+//    }
 }
