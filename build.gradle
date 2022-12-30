@@ -3,8 +3,6 @@ plugins {
 	id 'org.springframework.boot' version '2.7.5'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
     id 'application'
-//    id 'jacoco'
-//    id 'checkstyle'
     id 'org.liquibase.gradle' version '2.0.4'
     id 'checkstyle'
     id 'jacoco'
@@ -24,6 +22,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'org.liquibase:liquibase-core'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.4.RELEASE'
@@ -61,6 +60,8 @@ dependencies {
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
     implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.13.3'
 
+    // for testing email
+    testImplementation 'com.icegreen:greenmail-junit5:1.6.5'
 }
 
 test {

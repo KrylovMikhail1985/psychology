@@ -21,18 +21,25 @@
 <strong th:text="${#dates.format(day.getDate(), 'EEEE dd.MM.yyyy')}">23.11.2022</strong>
 <span>в</span>
 <strong th:text="${dayTime.getLocalTime()}">11:00</strong>
-<form th:action="'/' + confirm + '/' + ${product.id} + '/' + ${dayTime.id}" th:object="${therapy}">
-    <br/><br/>
-    Имя: <input type="text" th:field="*{name}">
-    <x th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</x>
-    <br/><br/>
-    email: <input type="text" th:field="*{email}" placeholder="example@mail.ru">
-    <x th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Error</x>
-    <br/><br/>
-    телефон: <input type="text" th:field="*{phoneNumber}" placeholder="8(123)123-12-12">
-    <x th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}">Error</x>
-    <br/><br/>
-    <input type="submit" value="Отправить подтверждение на email">
+<br>
+<div>Имя: <strong th:text="${therapy.name}">Дарья</strong></div>
+<div>email: <strong th:text="${therapy.email}">email@email.com</strong></div>
+<div>Телефон: <strong th:text="${therapy.phoneNumber}">8(000)000-00-00</strong></div>
+<br>
+<form th:action="'/' + confirm2 + '/' + ${product.id} + '/' + ${dayTime.id}" th:object="${therapy}">
+    <span th:if="${codeIsNotCorrect}">
+        Вы ввели не тот код.
+        Мы направили вам новый.
+        Для подтверждения записи </span>
+    ведите код отправленный на почту:
+    <br/>
+    <input type="hidden" name="name" th:value="${therapy.name}">
+    <input type="hidden" name="email" th:value="${therapy.email}">
+    <input type="hidden" name="phoneNumber" th:value="${therapy.phoneNumber}">
+    <input type="hidden" name="randomForeSymbolCode" th:value="${randomForeSymbolCode}">
+    <input type="text" name="inputForeSymbolCode" placeholder="9999">
+    <br>
+    <input type="submit" value="Подтвердить">
 </form>
 <!--    <a th:href="'/' + confirm + '/' + ${product.id} + '/' + ${dayTime.id}" class="button">Подтвердить</a>-->
 </body>

@@ -9,6 +9,17 @@ spring:
   profiles:
     #    active: myTests
     active: ${PROD:dev}
+  mail:
+    host: ${host:127.0.0.1}
+    username: ${mail:user}
+    password: ${mailPassword:password}
+    port: ${mailPort:3025}
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls.enable: true
 
 adminPassword: ${SECRET:$2a$10$DordpFcR24yGzOrOl1AKe.sVSYIAxp6ZpZ84MS5UlDcztxbjvcp8G}
 adminName: KrylovaDi

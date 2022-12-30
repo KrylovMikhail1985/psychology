@@ -1,9 +1,13 @@
 package krylov.psychology.util;
 
+import krylov.psychology.mail.EmailServiceImpl;
 import krylov.psychology.model.Day;
 import krylov.psychology.model.DayTime;
+import krylov.psychology.model.Product;
 import krylov.psychology.model.Therapy;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.util.ArrayList;
@@ -11,7 +15,11 @@ import java.util.Date;
 import java.util.List;
 
 public class Util {
+    @Autowired
+    private EmailServiceImpl emailService;
     private static final long DAY_INT = 86400000;
+    private static final int MIN = 1000;
+    private static final int MAX = 9999;
     public static   List<Day> createLocalDayList(List<Day> currentDayList, Date startDate) {
         List<Day> localDayList = new ArrayList<>();
         for (var i = 0; i < 5; i++) {
@@ -77,17 +85,6 @@ public class Util {
         }
         return dayList;
     }
-    private static boolean weHaveFalse(List<DayTime> dayTimeList, LocalTime startTime, LocalTime endTime) {
-        for (DayTime dayTime : dayTimeList) {
-            LocalTime time = dayTime.getLocalTime();
-            if ((time.isAfter(startTime) || time.equals(startTime)) &&
-                    (time.isBefore(endTime) || time.equals(endTime)) &&
-                    !dayTime.isTimeIsFree()) {
-                return true;
-            }
-        }
-        return false;
-    }
     public static Day thisDayWithActivatedDayTime(Day day, LocalTime startOfTherapy, LocalTime duration) {
         LocalTime endOfTherapy = startOfTherapy.plusHours(duration.getHour()).plusMinutes(duration.getMinute());
         for (DayTime dayTime: day.getDayTimes()) {
@@ -98,6 +95,17 @@ public class Util {
             }
         }
         return day;
+    }
+    private static boolean weHaveFalse(List<DayTime> dayTimeList, LocalTime startTime, LocalTime endTime) {
+        for (DayTime dayTime : dayTimeList) {
+            LocalTime time = dayTime.getLocalTime();
+            if ((time.isAfter(startTime) || time.equals(startTime)) &&
+                    (time.isBefore(endTime) || time.equals(endTime)) &&
+                    !dayTime.isTimeIsFree()) {
+                return true;
+            }
+        }
+        return false;
     }
     public static Day thisDayWithDeactivatedDayTimeIfNoTherapy(Day day, LocalTime startOfTherapy, LocalTime duration) {
         LocalTime endOfTherapy = startOfTherapy.plusHours(duration.getHour()).plusMinutes(duration.getMinute());
@@ -119,5 +127,56 @@ public class Util {
             }
         }
         return day;
+    }
+    public static String randomForeSymbolCode() {
+        int randomInt = (int) ((Math.random() * (MAX - MIN)) + MIN);
+        return Integer.toString(randomInt);
+    }
+    public static String textMessageForClientConfirmation(Therapy therapy, String code) {
+        Product product = therapy.getProduct();
+        DayTime dayTime = therapy.getDayTime();
+
+        String date = dateToString(dayTime.getDay().getDate());
+        String duration = durationToString(product.getDuration());
+
+        return "Добрый день, " + therapy.getName() + "!"
+                + "\nВы подали заявку на услугу \"" + product.getProductName() + "\"."
+                + "\nВстреча запланирована на " + date + " в " + dayTime.getLocalTime()
+                + "\nПродолжительность встречи " + duration
+                + "\nСтоимость " + product.getCost() + " рублей."
+                + "\n\nДля подтверждения записи укажите данный код подтверждения: " + code;
+    }
+    public static String textMessageForClientForTransfer(Therapy therapy) {
+        Product product = therapy.getProduct();
+        DayTime dayTime = therapy.getDayTime();
+
+        String date = dateToString(dayTime.getDay().getDate());
+        String duration = durationToString(product.getDuration());
+
+        return "Добрый день, " + therapy.getName() + "!"
+                + "\nВаша запись на услугу \"" + product.getProductName() + "\" была перенесена."
+                + "\nТеперь встреча запланирована на " + date + " в " + dayTime.getLocalTime()
+                + "\nПродолжительность встречи " + duration
+                + "\nСтоимость " + product.getCost() + " рублей."
+                + "\n\nХорошего дня!";
+    }
+    private static String durationToString(LocalTime duration) {
+        String result = "";
+        if (duration.getHour() == 1) {
+            result = duration.getHour() + " час";
+        } else  if (duration.getHour() > 1 && duration.getHour() < 5) {
+            result = duration.getHour() + " часа";
+        } else if (duration.getHour() > 5) {
+            result = duration.getHour() + " часов";
+        }
+        if (duration.getMinute() > 0) {
+            result = result + " " + duration.getMinute() + " минут";
+        }
+        return result;
+    }
+    private static String dateToString(Date date) {
+        String pattern = "EEEE d MMMM";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        return simpleDateFormat.format(date);
     }
 }

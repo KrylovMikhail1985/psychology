@@ -1,5 +1,6 @@
 package krylov.psychology.controller;
 
+import krylov.psychology.mail.EmailServiceImpl;
 import krylov.psychology.model.Day;
 import krylov.psychology.model.DayTime;
 import krylov.psychology.model.DefaultTime;
@@ -42,6 +43,8 @@ public class AdminController {
     private String adminPassword;
     @Value("${adminName}")
     private String adminName;
+    @Autowired
+    private EmailServiceImpl emailService;
     @Autowired
     private PasswordEncoder encoder;
     @Autowired
@@ -351,7 +354,7 @@ public class AdminController {
         model.addAttribute("product", product);
 
         Date today = new Date();
-        Date tomorrow = new Date(today.getTime() + dayInt);
+        Date tomorrow = new Date(today.getTime());
         Date firstDate = new Date(tomorrow.getYear(), tomorrow.getMonth(), tomorrow.getDate() + week);
         Date lastDate = new Date(tomorrow.getYear(), tomorrow.getMonth(), tomorrow.getDate() + 5 + week);
 
@@ -397,45 +400,13 @@ public class AdminController {
         dayService.update(dayFromDelTherapy.getId(), dayFromDelTherapy);
         therapyService.deleteById(therapyId);
 
+
+        //message for client
+        String message = Util.textMessageForClientForTransfer(newTherapy);
+        emailService.sendSimpleMessage(therapy.getEmail(), "Перенос встречи", message);
+
         return "redirect:" + "/admin/admin_one_day/" + oldDayLong;
     }
-
-//    private  List<Day> utilCreateLocalDayList(List<Day> currentDayList, Date startDate) {
-//        List<Day> localDayList = new ArrayList<>();
-//        for (var i = 0; i < 5; i++) {
-//            Date newDate = new Date(startDate.getTime() + dayInt * i);
-//            Day newDay = new Day(newDate);
-//            for (Day day: currentDayList) {
-//                if (day.getDate().getTime() == newDate.getTime()) {
-//                    newDay = day;
-//                }
-//            }
-//            localDayList.add(newDay);
-//        }
-//        return localDayList;
-//    }
-//    private Day utilCreateNewDay(Date date, List<DefaultTime> defaultTimeList) {
-//        Day day = new Day();
-//        day.setDate(date);
-//        List<DayTime> dayTimeList = dayTimeService.createListOfDayTimesFromDefaultTime(day, defaultTimeList);
-//        day.setDayTimes(dayTimeList);
-//        return dayService.create(day);
-//    }
-//    private int utilCountOfDaysInMonth(Date date) {
-//        final int year1900 = 1900;
-//        final int one = 1;
-//        int year = date.getYear() + year1900;
-//        int month = date.getMonth() + one;
-//        YearMonth yearMonthObject = YearMonth.of(year, month);
-//        return yearMonthObject.lengthOfMonth();
-//    }
-//    private List<Date> findAllDateFromDays(List<Day> dayList) {
-//        List<Date> dateList = new ArrayList<>();
-//        for (Day day: dayList) {
-//            dateList.add(day.getDate());
-//        }
-//        return dateList;
-//    }
     private boolean userAndPasswordIsCorrect(String userName, String password) {
         if (userName.equals(adminName) && encoder.matches(password, adminPassword)) {
             return true;
@@ -444,38 +415,4 @@ public class AdminController {
             return false;
         }
     }
-//    private boolean thereIsNoTherapyInThisTime(DayTime dayTime) {
-//        LocalTime localTime = dayTime.getLocalTime();
-//        Day day = dayTime.getDay();
-//
-//        List<Therapy> therapyList = new ArrayList<>();
-//        for (DayTime time: day.getDayTimes()) {
-//            Therapy therapy = time.getTherapy();
-//            if (therapy != null) {
-//                therapyList.add(therapy);
-//            }
-//        }
-//
-//        for (Therapy therapy: therapyList) {
-//            LocalTime starTherapy = therapy.getDayTime().getLocalTime();
-//            LocalTime duration = therapy.getProduct().getDuration();
-//            LocalTime endTherapy = starTherapy.plusHours(duration.getHour()).plusMinutes(duration.getMinute());
-//            if ((localTime.isAfter(starTherapy) || localTime.equals(starTherapy))
-//                    && (localTime.isBefore(endTherapy) || localTime.equals(endTherapy))) {
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
-//    private Day activateDayTimeInTheDay(Day day, LocalTime startOfTherapy, LocalTime duration) {
-//        LocalTime endOfTherapy = startOfTherapy.plusHours(duration.getHour()).plusMinutes(duration.getMinute());
-//        for (DayTime dayTime: day.getDayTimes()) {
-//            LocalTime time = dayTime.getLocalTime();
-//            if ((time.isAfter(startOfTherapy) || time.equals(startOfTherapy)) &&
-//                    (time.isBefore(endOfTherapy) || time.equals(endOfTherapy))) {
-//                dayTime.setTimeIsFree(true);
-//            }
-//        }
-//        return day;
-//    }
 }

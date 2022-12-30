@@ -39,6 +39,11 @@ class PsychologyApplicationTests {
     private String adminName;
     private String headerBearer;
 
+//    @RegisterExtension
+//    static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP)
+//            .withConfiguration(GreenMailConfiguration.aConfig().withUser("user", "password"))
+//            .withPerMethodLifecycle(false);
+
     @BeforeAll
     @DBUnit(schema = "public")
     @DataSet("fillingDB.yml")

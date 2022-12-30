@@ -1,5 +1,6 @@
 package krylov.psychology.controller;
 
+import krylov.psychology.mail.EmailServiceImpl;
 import krylov.psychology.model.Day;
 import krylov.psychology.model.DayTime;
 import krylov.psychology.model.Product;
@@ -18,11 +19,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 @Controller
 public class RootController {
+    @Autowired
+    private EmailServiceImpl emailService;
     @Autowired
     private ProductServiceImpl productService;
     @Autowired
@@ -46,12 +50,16 @@ public class RootController {
     @GetMapping("record/{id}")
     public String recordingOnTherapy(@PathVariable(name = "id") long id,
                                      @RequestParam(name = "week", required = false) Integer week,
+                                     @RequestParam(name = "timeIsOccupy", required = false) boolean timeIsOccupy,
                                      Model model) {
         Product product = productService.findById(id);
         model.addAttribute("product", product);
 
         if (week == null || week < 0) {
             week = 0;
+        }
+        if (timeIsOccupy) {
+            model.addAttribute("timeIsOccupy", true);
         }
 
         Date today = new Date();
@@ -94,88 +102,76 @@ public class RootController {
         Product product = productService.findById(productId);
         DayTime dayTime = dayTimeService.findById(timeId);
         Day day = dayTime.getDay();
+
         model.addAttribute("product", product);
         model.addAttribute("day", day);
         model.addAttribute("dayTime", dayTime);
         if (bindingResult.hasErrors()) {
             return "recording_on_therapy_client.html";
         }
-        Day thisDayDeactivatedTime =
-                Util.thisDayWithDeactivatedDayTimeIfNoTherapy(day, dayTime.getLocalTime(), product.getDuration());
-        dayService.update(thisDayDeactivatedTime.getId(), thisDayDeactivatedTime);
+
+        therapy.setProduct(product);
+        therapy.setDayTime(dayTime);
+
+        String codeForConfirmation = Util.randomForeSymbolCode();
+        model.addAttribute("therapy", therapy);
+        model.addAttribute("randomForeSymbolCode", codeForConfirmation);
+        String message = Util.textMessageForClientConfirmation(therapy, codeForConfirmation);
+        emailService.sendSimpleMessage(therapy.getEmail(), "Подтверждение записи", message);
+        return "recording_on_therapy_client_confirm.html";
+    }
+    @GetMapping("confirm2/{productId}/{timeId}")
+    public String confirm2RecordOnTherapy(Therapy therapy,
+                                         @PathVariable(name = "productId") long productId,
+                                         @PathVariable(name = "timeId") long timeId,
+                                         @RequestParam("randomForeSymbolCode") String randomForeSymbolCode,
+                                         @RequestParam("inputForeSymbolCode") String inputForeSymbolCode,
+                                         Model model) {
+        inputForeSymbolCode = inputForeSymbolCode.trim();
+        Product product = productService.findById(productId);
+        DayTime dayTime = dayTimeService.findById(timeId);
+        Day day = dayTime.getDay();
+
+        model.addAttribute("product", product);
+        model.addAttribute("day", day);
+        model.addAttribute("dayTime", dayTime);
 
         therapy.setProduct(product);
         therapy.setDayTime(dayTime);
         therapy.setCreatedAt(new Date());
-        System.out.println(therapy);
-        therapyService.createTherapy(therapy);
+
+        if (!randomForeSymbolCode.equals(inputForeSymbolCode)) {
+            model.addAttribute("codeIsNotCorrect", true);
+            String codeForConfirmation = Util.randomForeSymbolCode();
+            model.addAttribute("randomForeSymbolCode", codeForConfirmation);
+            String message = Util.textMessageForClientConfirmation(therapy, codeForConfirmation);
+            emailService.sendSimpleMessage(therapy.getEmail(), "Подтверждение записи", message);
+            return "recording_on_therapy_client_confirm.html";
+        }
+
+        try {
+            Day thisDayDeactivatedTime =
+                    Util.thisDayWithDeactivatedDayTimeIfNoTherapy(day, dayTime.getLocalTime(), product.getDuration());
+            dayService.update(thisDayDeactivatedTime.getId(), thisDayDeactivatedTime);
+            therapyService.createTherapy(therapy);
+            emailService.sendSimpleMessage(
+                    therapy.getEmail(),
+                    "Запись подтверждена",
+                    "Запись успешно подтверждена!");
+        } catch (Exception e) {
+            return "redirect:" + "/record/" + product.getId() + "?timeIsOccupy=true";
+        }
         return "recording_on_therapy_success.html";
     }
     @GetMapping("/test")
     public String test() {
-        Date today = new Date();
-        Date tomorrow = new Date(today.getTime() + dayInt);
-        System.out.println(today);
-        System.out.println(tomorrow);
+        Date date = new Date();
+        String pattern = "EEEE dd MMMM yyyy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String date3 = simpleDateFormat.format(date);
+        System.out.println(date3);
+
+//        emailService.sendSimpleMessage("89261789846@mail.ru", "Test message", "Это тестовое сообщение");
         return "index.html";
     }
-//    private  List<Day> utilCreateLocalDayList(List<Day> currentDayList, Date startDate) {
-//        List<Day> localDayList = new ArrayList<>();
-//        for (var i = 0; i < 5; i++) {
-//            Date newDate = new Date(startDate.getTime() + dayInt * i);
-//            Day newDay = new Day(newDate);
-//            for (Day day: currentDayList) {
-//                if (day.getDate().getTime() == newDate.getTime()) {
-//                    newDay = day;
-//                }
-//            }
-//            localDayList.add(newDay);
-//        }
-//        return localDayList;
-//    }
-//    private List<Day> utilDisableNotFitTime(List<Day> dayList, LocalTime duration) {
-//        for (Day day: dayList) {
-//            List<DayTime> dayTimeList = day.getDayTimes();
-//            for (DayTime dayTime: dayTimeList) {
-//                LocalTime startTherapy = dayTime.getLocalTime();
-//                LocalTime endTherapy = startTherapy.plusHours(duration.getHour()).plusMinutes(duration.getMinute());
-//                if (utilWeHaveFalse(dayTimeList, startTherapy, endTherapy)) {
-//                    dayTime.setTimeIsFree(false);
-//                }
-//            }
-//        }
-//        return dayList;
-//    }
-//    private boolean utilWeHaveFalse(List<DayTime> dayTimeList, LocalTime startTime, LocalTime endTime) {
-//        for (DayTime dayTime: dayTimeList) {
-//            LocalTime time = dayTime.getLocalTime();
-//            if ((time.isAfter(startTime) || time.equals(startTime)) &&
-//                    (time.isBefore(endTime) || time.equals(endTime)) &&
-//                    !dayTime.isTimeIsFree()) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-//    private Day thisDayWithDeactivatedDayTime(Day day, LocalTime startOfTherapy, LocalTime duration) {
-//        LocalTime endOfTherapy = startOfTherapy.plusHours(duration.getHour()).plusMinutes(duration.getMinute());
-//        for (DayTime dayTime: day.getDayTimes()) {
-//            LocalTime time = dayTime.getLocalTime();
-//            if ((time.isAfter(startOfTherapy) || time.equals(startOfTherapy))
-//                    && (time.isBefore(endOfTherapy) || time.equals(endOfTherapy))
-//                    && !dayTime.isTimeIsFree()) {
-//                System.out.println("Time: " + time + " is not active");
-//                throw new RuntimeException("Time: " + time + " is not active");
-//            }
-//        }
-//
-//        for (DayTime dayTime: day.getDayTimes()) {
-//            LocalTime time = dayTime.getLocalTime();
-//            if ((time.isAfter(startOfTherapy) || time.equals(startOfTherapy)) &&
-//                    (time.isBefore(endOfTherapy) || time.equals(endOfTherapy))) {
-//                dayTime.setTimeIsFree(false);
-//            }
-//        }
-//        return day;
-//    }
 }
