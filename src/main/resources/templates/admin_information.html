@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th=”http://www.thymeleaf.org”>
+<link rel="stylesheet" type="text/css" href="/src/main/resources/static/css/style.css" th:href="@{/css/style.css}"/>
+<head>
+    <meta charset="UTF-8">
+    <title>KrylovaDi</title>
+</head>
+<nav>
+    <a href="/">Главная</a>
+    |
+    <a href="/admin">Администратор</a>
+    |
+    <a href="/admin/update_login_info">Обновление пароля</a>
+</nav>
+<body>
+<h3>Обновление данных пользователя</h3>
+    <form action="/admin/update_info" method="post" th:object="${information}">
+        <br>
+        Описание:
+        <br>
+        <input type="text" name="shortInformation" th:field="*{shortInformation}">
+        <br><br>
+        <input class="button" type="submit" value="Обновить информацию">
+        <br>
+    </form>
+</body>
+</html>

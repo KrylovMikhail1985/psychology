@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
@@ -35,8 +34,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 class PsychologyApplicationTests {
     @Autowired
     private MockMvc mockMvc;
-    @Value("${adminName}")
-    private String adminName;
     private String headerBearer;
 
 //    @RegisterExtension
@@ -50,8 +47,8 @@ class PsychologyApplicationTests {
     public void setHeaderBearer() throws Exception {
         MockHttpServletResponse response =
                 mockMvc.perform(post("/admin/login")
-                        .param("login", adminName)
-                        .param("password", "password")
+                        .param("login", "admin")
+                        .param("password", "admin")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .accept(MediaType.APPLICATION_JSON)
                 ).andReturn().getResponse();
@@ -82,8 +79,8 @@ class PsychologyApplicationTests {
         public void adminLogin() throws Exception {
             MockHttpServletResponse response1 =
                     mockMvc.perform(post("/admin/login")
-                            .param("login", adminName)
-                            .param("password", "password")
+                            .param("login", "admin")
+                            .param("password", "admin")
                             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                             .accept(MediaType.APPLICATION_JSON)
                     ).andReturn().getResponse();

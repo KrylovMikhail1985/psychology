@@ -4,17 +4,18 @@ import krylov.psychology.mail.EmailServiceImpl;
 import krylov.psychology.model.Day;
 import krylov.psychology.model.DayTime;
 import krylov.psychology.model.DefaultTime;
+import krylov.psychology.model.MyInformation;
 import krylov.psychology.model.Product;
 import krylov.psychology.model.Therapy;
 import krylov.psychology.security.jwt.JwtTokenProvider;
 import krylov.psychology.service.DayServiceImpl;
 import krylov.psychology.service.DayTimeServiceImpl;
 import krylov.psychology.service.DefaultTimeServiceImpl;
+import krylov.psychology.service.MyInformationServiceImpl;
 import krylov.psychology.service.ProductServiceImpl;
 import krylov.psychology.service.TherapyServiceImpl;
 import krylov.psychology.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,10 +40,6 @@ import java.util.Map;
 @Controller
 @RequestMapping("admin")
 public class AdminController {
-    @Value("${adminPassword}")
-    private String adminPassword;
-    @Value("${adminName}")
-    private String adminName;
     @Autowired
     private EmailServiceImpl emailService;
     @Autowired
@@ -59,6 +56,8 @@ public class AdminController {
     private JwtTokenProvider jwtTokenProvider;
     @Autowired
     private TherapyServiceImpl therapyService;
+    @Autowired
+    private MyInformationServiceImpl myInformationService;
 
     private final long dayInt = 86400000;
 
@@ -80,7 +79,7 @@ public class AdminController {
             token = jwtTokenProvider.createToken(login);
             Cookie loginCookie = new Cookie("auth_token", token);
             // living time in seconds
-            loginCookie.setMaxAge(60 * 60);
+            loginCookie.setMaxAge(60);
             response.addCookie(loginCookie);
             return "admin.html";
         }
@@ -147,7 +146,14 @@ public class AdminController {
         return "redirect:" + "/admin/admin_all_products";
     }
     @GetMapping("delete_product/{id}")
-    public String deleteProductGet(@PathVariable(name = "id") long id) {
+    public String deleteProductGet(@PathVariable(name = "id") long id,
+                                   Model model) {
+        List<Therapy> therapyList = therapyService.findTherapyWithProductId(id);
+        if (therapyList.size() > 0) {
+            model.addAttribute("product", productService.findById(id));
+            model.addAttribute("thereIsTherapyWithThisProduct", true);
+            return "admin_one_product.html";
+        }
         productService.deleteProduct(id);
         return "redirect:" + "/admin/admin_all_products";
     }
@@ -407,7 +413,54 @@ public class AdminController {
 
         return "redirect:" + "/admin/admin_one_day/" + oldDayLong;
     }
+    @GetMapping("/info")
+    public String updateInfo(MyInformation myInformation, Model model) {
+        myInformation = myInformationService.find();
+        model.addAttribute("information", myInformation);
+        return "admin_information.html";
+    }
+    @PostMapping("/update_info")
+    public String updateInfoPost(MyInformation myInformation,
+                                 Model model) {
+        MyInformation info = myInformationService.find();
+        info.setShortInformation(myInformation.getShortInformation());
+        myInformationService.save(info);
+        return "index.html";
+    }
+    @GetMapping("/update_login_info")
+    public String updateLoginInfo(Model model) {
+        return "admin_update_password.html";
+    }
+    @PostMapping("/update_login_info")
+    public String updateLoginInfoPost(@RequestParam(name = "old_login") String oldLogin,
+                                      @RequestParam(name = "old_password") String oldPassword,
+                                      @RequestParam(name = "new_login") String newLogin,
+                                      @RequestParam(name = "new_password") String newPassword,
+                                      Model model) {
+        MyInformation myInformation = myInformationService.find();
+        if (myInformation.getLogin().equals(oldLogin) && encoder.matches(oldPassword, myInformation.getPassword())) {
+            myInformation.setLogin(newLogin);
+            myInformation.setPassword(newPassword);
+            myInformationService.save(myInformation);
+            return "redirect:" + "/admin";
+        }
+        model.addAttribute("wrong", true);
+        return "admin_update_password.html";
+    }
+
+
     private boolean userAndPasswordIsCorrect(String userName, String password) {
+        MyInformation myInformation = new MyInformation();
+        try {
+            myInformation = myInformationService.find();
+        } catch (Exception e) {
+            myInformation.setLogin("admin");
+            myInformation.setPassword(encoder.encode("admin"));
+            myInformationService.save(myInformation);
+        }
+        String adminName = myInformation.getLogin();
+        String adminPassword = myInformation.getPassword();
+
         if (userName.equals(adminName) && encoder.matches(password, adminPassword)) {
             return true;
         } else {

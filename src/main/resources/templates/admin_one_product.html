@@ -16,6 +16,7 @@
     <a href="/admin/admin_all_products">Показать все продукты</a>
 </nav>
 <body>
+<h3 style="background-color: red" th:if="${thereIsTherapyWithThisProduct}">Терапию удалить нельзя так как на нее есть записи!</h3>
 <h3>Текущий продукт:</h3>
 
 <table>
@@ -46,8 +47,8 @@
 </table>
 <br>
 <a th:href="'/' + admin + '/' + update_product + '/' + ${product.id}" class="button">внести изменения</a>
-<!--<br/>-->
-<!--<a th:href="'/' + admin + '/' + delete_product + '/' + ${product.id}" class="button">удалить</a>-->
+<br/>
+<a th:href="'/' + admin + '/' + delete_product + '/' + ${product.id}" class="button">удалить</a>
 
 </body>
 </html>

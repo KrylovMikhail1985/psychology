@@ -7,6 +7,9 @@ import krylov.psychology.model.Product;
 import krylov.psychology.model.Therapy;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.YearMonth;
@@ -178,5 +181,17 @@ public class Util {
         String pattern = "EEEE d MMMM";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         return simpleDateFormat.format(date);
+    }
+    public static void deleteAuthCookie(HttpServletRequest req,
+                                        HttpServletResponse resp) {
+        Cookie[] cookies = req.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                cookie.setValue("");
+                cookie.setPath("/");
+                cookie.setMaxAge(0);
+                resp.addCookie(cookie);
+            }
+        }
     }
 }

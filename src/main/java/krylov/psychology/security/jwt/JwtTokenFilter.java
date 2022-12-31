@@ -49,7 +49,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 token = requestCookies[i].getValue();
             }
         }
-
         if (token == null) {
             chain.doFilter(request, response);
             return;

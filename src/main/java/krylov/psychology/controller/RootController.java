@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -164,13 +166,16 @@ public class RootController {
         return "recording_on_therapy_success.html";
     }
     @GetMapping("/test")
-    public String test() {
-        Date date = new Date();
-        String pattern = "EEEE dd MMMM yyyy";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        String date3 = simpleDateFormat.format(date);
-        System.out.println(date3);
-
+    public String test(HttpServletResponse resp, HttpServletRequest req) {
+        Cookie[] cookies = req.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                cookie.setValue("");
+                cookie.setPath("/admin");
+                cookie.setMaxAge(0);
+                resp.addCookie(cookie);
+            }
+        }
 //        emailService.sendSimpleMessage("89261789846@mail.ru", "Test message", "Это тестовое сообщение");
         return "index.html";
     }
