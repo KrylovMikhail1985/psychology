@@ -12,19 +12,12 @@
 <nav>
     <a href="/">Главная</a>
     |
-    <a href="/admin">admin</a>
-    |
-    <a href="/admin/admin_all_products">Показать все продукты</a>
-    |
-    <a href="/admin/create_new_product">Создать новый продукт</a>
-    |
-    <a href="/admin/active_new_month">Открыть запись на текущий месяц</a>
-    |
-    <a href="/admin/active_new_month?next=yes">Открыть запись на следующий месяц</a>
+    <a href="/admin">Администратор</a>
 </nav>
 <div>
-    <a th:href="all_days + '?' + week + '=' + ${before}" class="button">назад</a>
-    <a th:href="all_days + '?' + week + '=' + ${after}" class="button">вперед</a>
+    <a th:href="all_days + '?' + week + '=' + ${before}" class="button2"><--назад</a>
+    <span style="display: inline-block; width: 52vw"></span>
+    <a th:href="all_days + '?' + week + '=' + ${after}" class="button2">вперед--></a>
 </div>
 <div class="row">
     <div class="column">
@@ -37,10 +30,8 @@
                 </th>
             </tr>
             <tr th:each="dayTime : ${d1.getDayTimes()}">
-                <td>
-                    <span th:if="${!dayTime.isTimeIsFree()}" class="emit" th:text="${dayTime.localTime}"></span>
-                    <span th:if="${dayTime.isTimeIsFree()}" th:text="${dayTime.localTime}"></span>
-                </td>
+                <td th:if="${!dayTime.isTimeIsFree()}" class="emit" th:text="${dayTime.localTime}"></td>
+                <td th:if="${dayTime.isTimeIsFree()}" th:text="${dayTime.localTime}"></td>
             </tr>
         </table>
     </div>
@@ -52,10 +43,8 @@
                 </a>
             </th>
             <tr th:each="dayTime : ${d2.getDayTimes()}">
-                <td>
-                    <span th:if="${!dayTime.isTimeIsFree()}" class="emit" th:text="${dayTime.localTime}"></span>
-                    <span th:if="${dayTime.isTimeIsFree()}" th:text="${dayTime.localTime}"></span>
-                </td>
+                <td th:if="${!dayTime.isTimeIsFree()}" class="emit" th:text="${dayTime.localTime}"></td>
+                <td th:if="${dayTime.isTimeIsFree()}" th:text="${dayTime.localTime}"></td>
             </tr>
         </table>
     </div>
@@ -67,10 +56,8 @@
                 </a>
             </th>
             <tr th:each="dayTime : ${d3.getDayTimes()}">
-                <td>
-                    <span th:if="${!dayTime.isTimeIsFree()}" class="emit" th:text="${dayTime.localTime}"></span>
-                    <span th:if="${dayTime.isTimeIsFree()}" th:text="${dayTime.localTime}"></span>
-                </td>
+                <td th:if="${!dayTime.isTimeIsFree()}" class="emit" th:text="${dayTime.localTime}"></td>
+                <td th:if="${dayTime.isTimeIsFree()}" th:text="${dayTime.localTime}"></td>
             </tr>
         </table>
     </div>
@@ -82,10 +69,8 @@
                 </a>
             </th>
             <tr th:each="dayTime : ${d4.getDayTimes()}">
-                <td>
-                    <span th:if="${!dayTime.isTimeIsFree()}" class="emit" th:text="${dayTime.localTime}"></span>
-                    <span th:if="${dayTime.isTimeIsFree()}" th:text="${dayTime.localTime}"></span>
-                </td>
+                <td th:if="${!dayTime.isTimeIsFree()}" class="emit" th:text="${dayTime.localTime}"></td>
+                <td th:if="${dayTime.isTimeIsFree()}" th:text="${dayTime.localTime}"></td>
             </tr>
         </table>
     </div>
@@ -97,10 +82,8 @@
                 </a>
             </th>
             <tr th:each="dayTime : ${d5.getDayTimes()}">
-                <td>
-                    <span th:if="${!dayTime.isTimeIsFree()}" class="emit" th:text="${dayTime.localTime}"></span>
-                    <span th:if="${dayTime.isTimeIsFree()}" th:text="${dayTime.localTime}"></span>
-                </td>
+                <td th:if="${!dayTime.isTimeIsFree()}" class="emit" th:text="${dayTime.localTime}"></td>
+                <td th:if="${dayTime.isTimeIsFree()}" th:text="${dayTime.localTime}"></td>
             </tr>
         </table>
     </div>

@@ -11,7 +11,9 @@
 <nav>
     <a href="/">Главная</a>
     |
-    <a href="/all_therapies">Перечень предлагаемых услуг</a>
+    <a href="/admin">Администратор</a>
+    |
+    <a href="/admin/all_days">Показать все рабочие дни</a>
 </nav>
 <body>
 <h2>Перенос терапии</h2>
@@ -26,9 +28,10 @@ email: <strong th:text="${therapy.email}">kkk@mail.com</strong>
 <h3>Пожалуйста выберите день и время</h3>
 <div>
     <a th:href="'/' + admin + '/' + transfer_therapy + '/' + ${therapy.id} + '?' + week + '=' + ${before}"
-       class="button">назад</a>
+       class="button2"><--назад</a>
+    <span style="display: inline-block; width: 52vw"></span>
     <a th:href="'/' + admin + '/' + transfer_therapy + '/' + ${therapy.id} + '?' + week + '=' + ${after}"
-       class="button">вперед</a>
+       class="button2">вперед--></a>
 </div>
 <div class="row">
     <div class="column">

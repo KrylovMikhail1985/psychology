@@ -14,17 +14,18 @@
     <a href="/all_therapies">Перечень предлагаемых услуг</a>
 </nav>
 <body>
-<h2><x th:text="${product.productName}">Название терапии</x></h2>
-<div><strong>Стоимость: </strong><x th:text="${product.cost}">3000</x> руб</div>
-<div><strong>Продолжительность: </strong><x th:text="${product.duration}">1 час 30 мин</x></div>
-<div>Дени и время записи</div>
-<strong th:text="${#dates.format(day.getDate(), 'EEEE dd.MM.yyyy')}">23.11.2022</strong>
-<span>в</span>
-<strong th:text="${dayTime.getLocalTime()}">11:00</strong>
+<h3><x th:text="${product.productName}">Название терапии</x></h3>
+<div>Стоимость: <x th:text="${product.cost}">3000</x> руб</div>
+<div>Продолжительность: <x th:text="${product.duration}">1 час 30 мин</x></div>
+<div>День и время записи:
+    <strong th:text="${#dates.format(day.getDate(), 'EEEE dd.MM.yyyy')}">23.11.2022</strong>
+    <span>в</span>
+    <strong th:text="${dayTime.getLocalTime()}">11:00</strong>
+</div>
 <br>
-<div>Имя: <strong th:text="${therapy.name}">Дарья</strong></div>
-<div>email: <strong th:text="${therapy.email}">email@email.com</strong></div>
-<div>Телефон: <strong th:text="${therapy.phoneNumber}">8(000)000-00-00</strong></div>
+<div><span class="input">Имя:</span><strong th:text="${therapy.name}">Дарья</strong></div>
+<div><span class="input">email: </span><strong th:text="${therapy.email}">email@email.com</strong></div>
+<div><span class="input">Телефон: </span><strong th:text="${therapy.phoneNumber}">8(000)000-00-00</strong></div>
 <br>
 <form th:action="'/' + confirm2 + '/' + ${product.id} + '/' + ${dayTime.id}" th:object="${therapy}">
     <span th:if="${codeIsNotCorrect}">
@@ -37,9 +38,9 @@
     <input type="hidden" name="email" th:value="${therapy.email}">
     <input type="hidden" name="phoneNumber" th:value="${therapy.phoneNumber}">
     <input type="hidden" name="randomForeSymbolCode" th:value="${randomForeSymbolCode}">
-    <input type="text" name="inputForeSymbolCode" placeholder="9999">
-    <br>
-    <input type="submit" value="Подтвердить">
+    <input class="center" style="width: 97.5vw; margin: 1vw" type="text" name="inputForeSymbolCode" placeholder="9999">
+    <br><br>
+    <input class="button" type="submit" value="Подтвердить">
 </form>
 <!--    <a th:href="'/' + confirm + '/' + ${product.id} + '/' + ${dayTime.id}" class="button">Подтвердить</a>-->
 </body>

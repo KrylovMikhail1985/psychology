@@ -14,14 +14,15 @@
     <a href="/all_therapies">Перечень предлагаемых услуг</a>
 </nav>
 <body>
-<h2><x th:text="${product.productName}">Название терапии</x></h2>
+<h3><x th:text="${product.productName}">Название терапии</x></h3>
 <div><strong>Стоимость: </strong><x th:text="${product.cost}">3000</x> руб</div>
 <div><strong>Продолжительность: </strong><x th:text="${product.duration}">1 час 30 мин</x></div>
 <h3 th:if="${timeIsOccupy}" style="background: red">Выбранное время уже заняли. Пожалуйста, выберите другое время</h3>
 <h3 th:if="!${timeIsOccupy}">Пожалуйста выберите день и время</h3>
 <div>
-    <a th:href="'/' + record + '/' + ${product.id} + '?' + week + '=' + ${before}" class="button">назад</a>
-    <a th:href="'/' + record + '/' + ${product.id} + '?' + week + '=' + ${after}" class="button">вперед</a>
+    <a th:href="'/' + record + '/' + ${product.id} + '?' + week + '=' + ${before}" class="button2"><--назад</a>
+    <span style="display: inline-block; width: 52vw"></span>
+    <a th:href="'/' + record + '/' + ${product.id} + '?' + week + '=' + ${after}" class="button2">вперед--></a>
 </div>
 <div class="row">
     <div class="column">

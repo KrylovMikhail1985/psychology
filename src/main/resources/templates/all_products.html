@@ -10,25 +10,15 @@
 </head>
 <nav>
     <a href="/">Главная</a>
-    |
-    <a href="/admin">admin</a>
-    |
-    <a href="/admin/admin_all_products">Показать все продукты</a>
-    |
-    <a href="/admin/create_new_product">Создать новый продукт</a>
-    |
-    <a href="/admin/active_new_month">Открыть запись на текущий месяц</a>
-    |
-    <a href="/admin/active_new_month?next=yes">Открыть запись на следующий месяц</a>
 </nav>
 <body>
 
-<table>
-    <tr>
-        <th>Перечень оказываемых услуг</th>
+<table style="border: none">
+    <tr style="border: none">
+        <th style="border: none">Перечень оказываемых услуг:</th>
     </tr>
-    <tr th:each="prod : ${listOfProducts}">
-        <td th:if="${prod.isActual}"><a th:text="${prod.productName}"
+    <tr style="border: none" th:each="prod : ${listOfProducts}">
+        <td style="border: none" th:if="${prod.isActual}"><a th:text="${prod.productName}"
                th:href="'/' + product + '/' + ${prod.id}" class="button">Наименование продукта</a></td>
     </tr>
 </table>

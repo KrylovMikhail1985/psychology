@@ -14,25 +14,27 @@
     <a href="/all_therapies">Перечень предлагаемых услуг</a>
 </nav>
 <body>
-<h2><x th:text="${product.productName}">Название терапии</x></h2>
-<div><strong>Стоимость: </strong><x th:text="${product.cost}">3000</x> руб</div>
-<div><strong>Продолжительность: </strong><x th:text="${product.duration}">1 час 30 мин</x></div>
-<div>Дени и время записи</div>
-<strong th:text="${#dates.format(day.getDate(), 'EEEE dd.MM.yyyy')}">23.11.2022</strong>
-<span>в</span>
-<strong th:text="${dayTime.getLocalTime()}">11:00</strong>
+<h3><x th:text="${product.productName}">Название терапии</x></h3>
+<div>Стоимость: <x th:text="${product.cost}">3000</x> руб</div>
+<div>Продолжительность: <x th:text="${product.duration}">1 час 30 мин</x></div>
+<div>День и время записи:
+    <strong th:text="${#dates.format(day.getDate(), 'EEEE dd.MM.yyyy')}">23.11.2022</strong>
+    <span>в</span>
+    <strong th:text="${dayTime.getLocalTime()}">11:00</strong>
+</div>
+<br><br>
+<div>Пожалуйста введите контактные данные:</div>
 <form th:action="'/' + confirm + '/' + ${product.id} + '/' + ${dayTime.id}" th:object="${therapy}">
-    <br/><br/>
-    Имя: <input type="text" th:field="*{name}">
+    <span class="input">Имя: </span><input type="text" th:field="*{name}">
     <x th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</x>
-    <br/><br/>
-    email: <input type="text" th:field="*{email}" placeholder="example@mail.ru">
+    <br/>
+    <span class="input">email: </span><input type="text" th:field="*{email}" placeholder="example@mail.ru">
     <x th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Error</x>
-    <br/><br/>
-    телефон: <input type="text" th:field="*{phoneNumber}" placeholder="8(123)123-12-12">
+    <br/>
+    <span class="input">телефон: </span><input type="text" th:field="*{phoneNumber}" placeholder="8(123)123-12-12">
     <x th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}">Error</x>
-    <br/><br/>
-    <input type="submit" value="Отправить подтверждение на email">
+    <br/><br>
+    <input class="button" type="submit" value="Отправить подтверждение на email">
 </form>
 <!--    <a th:href="'/' + confirm + '/' + ${product.id} + '/' + ${dayTime.id}" class="button">Подтвердить</a>-->
 </body>

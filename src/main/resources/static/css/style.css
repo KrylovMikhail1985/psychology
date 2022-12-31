@@ -1,48 +1,125 @@
+:root {
+    --s1: #128BB4;
+    --s2: #31505B;
+    --s3: #002937;
+    --r1: #FF8B10;
+    --r2: #806344;
+    --r3: #4E2800;
+    }
 html {
+    font-size: 3vw;
     margin: 0;
-    padding: 0
+    padding: 0;
     }
 nav {
-    margin: 10px 0;
-    background-color: white;
+    margin: 0;
+    padding: 0.2rem 0.5rem;
+    background-color: var(--s1);
+    }
+a {
+    color: var(--s3);
+    text-decoration: none;
+    }
+a:hover {
+    text-decoration: underline;
+}
+h3 {
+    margin: 0.5rem;
+    text-align: center;
+    color: var(--);
+    }
+select {
+    font-size: 1rem;
+    }
+input {
+    margin-top: 1rem;
+    width: 80vw;
+    font-size: 1rem;
+    border: solid 0.05rem;
+    border-color: var(--s1);
+    }
+.input {
+    margin-left: 0.5rem;
+    display: inline-block;
+    width: 16vw;
     }
 body {
     margin: 0;
-    background-color: yellow
     }
 table, th, td {
     border: solid;
     border-collapse: collapse;
     text-align: center
-}
-
+    }
+table {
+    width: 100vw;
+    }
+table a {
+    color: blue
+    }
+.center {
+    text-align: center;
+    }
 .row {
   display: flex;
-}
+    }
 
 .column {
-  flex: 20%;
-}
-
+  flex: 50%;
+  text-align: center;
+    }
+div > div > table {
+    width: 20vw;
+    border-width: 0;
+    }
+.checkbox {
+    width: 1rem;
+    height: 1rem;
+    border: solid red 1rem;
+    }
+.checkbox2 {
+    display: inline-block;
+    width: 8vw;
+    }
 .emit{
-    background-color: blue;
-}
-
-a.button {
-  font: bold 11px Arial;
-  text-decoration: none;
-  background-color: #EEEEEE;
-  color: #333333;
-  padding: 2px 6px 2px 6px;
-  border-top: 1px solid #CCCCCC;
-  border-right: 1px solid #333333;
-  border-bottom: 1px solid #333333;
-  border-left: 1px solid #CCCCCC;
-}
+    padding: 0, 1rem;
+    background-color: var(--s1);
+    color: var(--s3);
+    }
+.button {
+    margin: auto;
+    display: block;
+    width: 98vw;
+    font-size: 1.5rem;
+    text-align: center;
+    text-decoration: none;
+    background-color: var(--r1);
+    color: var(--r3);
+    padding: 0.1rem;
+    border: 0.07rem solid var(--r3)
+    }
+.button:hover {
+    text-decoration: underline;
+    }
+.button2:hover {
+    text-decoration: underline;
+    }
+.button2 {
+    margin: 0.2rem;
+    display: inline-block;
+    width: 20vw;
+    text-align: center;
+    text-decoration: none;
+    background-color: var(--r1);
+    color: var(--r3);
+    padding: 0.1rem;
+    border: 0.07rem solid var(--r3)
+    }
 .vertical-text {
-  writing-mode:tb-rl;
-  transform: rotate(180deg);
-}
+    writing-mode:tb-rl;
+    padding: 1rem 0;
+    transform: rotate(195deg);
+    }
 .gray {
-  color: gray
-}
+    color: gray
+    }

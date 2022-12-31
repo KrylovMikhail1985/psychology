@@ -12,15 +12,9 @@
 <nav>
     <a href="/">Главная</a>
     |
-    <a href="/admin">admin</a>
+    <a href="/admin">Администратор</a>
     |
-    <a href="/admin/admin_all_products">Показать все продукты</a>
-    |
-    <a href="/admin/create_new_product">Создать новый продукт</a>
-    |
-    <a href="/admin/active_new_month">Открыть запись на текущий месяц</a>
-    |
-    <a href="/admin/active_new_month?next=yes">Открыть запись на следующий месяц</a>
+    <a href="/admin/all_days">Показать все рабочие дни</a>
 </nav>
 
 <h3 th:text="${#dates.format(day.getDate(), 'EEEE dd.MM.yyyy')}"> 23.11.1985</h3>

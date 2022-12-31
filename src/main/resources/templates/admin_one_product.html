@@ -11,18 +11,11 @@
 <nav>
     <a href="/">Главная</a>
     |
-    <a href="/admin">admin</a>
+    <a href="/admin">Администратор</a>
     |
     <a href="/admin/admin_all_products">Показать все продукты</a>
-    |
-    <a href="/admin/create_new_product">Создать новый продукт</a>
-    |
-    <a href="/admin/active_new_month">Открыть запись на текущий месяц</a>
-    |
-    <a href="/admin/active_new_month?next=yes">Открыть запись на следующий месяц</a>
 </nav>
 <body>
-<!--<h3 th:text="Корректировка + ' ' + продукта + ':' + ' ' + ${product.productName}">-->
 <h3>Текущий продукт:</h3>
 
 <table>
@@ -51,10 +44,10 @@
         <td th:text="${product.description}">Описание данного продукта на много строчек с пояснениями.</td>
     </tr>
 </table>
-
+<br>
 <a th:href="'/' + admin + '/' + update_product + '/' + ${product.id}" class="button">внести изменения</a>
-<br/>
-<a th:href="'/' + admin + '/' + delete_product + '/' + ${product.id}" class="button">удалить</a>
+<!--<br/>-->
+<!--<a th:href="'/' + admin + '/' + delete_product + '/' + ${product.id}" class="button">удалить</a>-->
 
 </body>
 </html>
