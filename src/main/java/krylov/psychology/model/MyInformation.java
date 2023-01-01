@@ -57,4 +57,12 @@ public class MyInformation {
     public void setShortInformation(String shortInformation) {
         this.shortInformation = shortInformation;
     }
+
+    @Override
+    public String toString() {
+        return "MyInformation{" +
+                "login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }

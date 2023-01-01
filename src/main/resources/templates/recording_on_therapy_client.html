@@ -24,7 +24,7 @@
 </div>
 <br><br>
 <div>Пожалуйста введите контактные данные:</div>
-<form th:action="'/' + confirm + '/' + ${product.id} + '/' + ${dayTime.id}" th:object="${therapy}">
+<form th:action="@{/confirm/} + ${product.id} + '/' + ${dayTime.id}" th:object="${therapy}">
     <span class="input">Имя: </span><input type="text" th:field="*{name}">
     <x th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</x>
     <br/>
@@ -36,6 +36,5 @@
     <br/><br>
     <input class="button" type="submit" value="Отправить подтверждение на email">
 </form>
-<!--    <a th:href="'/' + confirm + '/' + ${product.id} + '/' + ${dayTime.id}" class="button">Подтвердить</a>-->
 </body>
 </html>

@@ -46,9 +46,9 @@
     </tr>
 </table>
 <br>
-<a th:href="'/' + admin + '/' + update_product + '/' + ${product.id}" class="button">внести изменения</a>
+<a th:href="@{/admin/update_product/} + ${product.id}" class="button">внести изменения</a>
 <br/>
-<a th:href="'/' + admin + '/' + delete_product + '/' + ${product.id}" class="button">удалить</a>
+<a th:href="@{/admin/delete_product/} + ${product.id}" class="button">удалить</a>
 
 </body>
 </html>

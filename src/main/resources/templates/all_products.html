@@ -19,7 +19,7 @@
     </tr>
     <tr style="border: none" th:each="prod : ${listOfProducts}">
         <td style="border: none" th:if="${prod.isActual}"><a th:text="${prod.productName}"
-               th:href="'/' + product + '/' + ${prod.id}" class="button">Наименование продукта</a></td>
+               th:href="@{/product/} + ${prod.id}" class="button">Наименование продукта</a></td>
     </tr>
 </table>
 

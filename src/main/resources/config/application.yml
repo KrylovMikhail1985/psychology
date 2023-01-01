@@ -28,3 +28,5 @@ jwt-token-secret: ${JWT-SECRET:lkrfslrekjfalecmasieuro3wurhnsjkcafjsefljashkfaew
 # 3600000 - 1 hour
 jwt-token-expired: 3600000
 
+email: $(email:123@123.com)
+

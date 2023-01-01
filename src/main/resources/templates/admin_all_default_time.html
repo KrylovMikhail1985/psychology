@@ -21,7 +21,7 @@
     </tr>
     <tr th:each="time : ${defaultTime}">
         <td th:text="${time.time}">11:20</td>
-        <td><a th:href="delete_default_time + '/' + ${time.id}" style="width: 85vw" class="button">удалить</a></td>
+        <td><a th:href="@{delete_default_time/} + ${time.id}" style="width: 85vw" class="button">удалить</a></td>
     </tr>
 </table>
 </body>

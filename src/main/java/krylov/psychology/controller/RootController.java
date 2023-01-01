@@ -3,14 +3,18 @@ package krylov.psychology.controller;
 import krylov.psychology.mail.EmailServiceImpl;
 import krylov.psychology.model.Day;
 import krylov.psychology.model.DayTime;
+import krylov.psychology.model.MyInformation;
 import krylov.psychology.model.Product;
 import krylov.psychology.model.Therapy;
 import krylov.psychology.service.DayServiceImpl;
 import krylov.psychology.service.DayTimeServiceImpl;
+import krylov.psychology.service.MyInformationServiceImpl;
 import krylov.psychology.service.ProductServiceImpl;
 import krylov.psychology.service.TherapyServiceImpl;
 import krylov.psychology.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,9 +22,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
@@ -37,8 +38,17 @@ public class RootController {
     private DayTimeServiceImpl dayTimeService;
     @Autowired
     private TherapyServiceImpl therapyService;
+    @Autowired
+    private MyInformationServiceImpl myInformationService;
+    @Value("${email}")
+    private String email;
     private final long dayInt = 86400000;
-
+    @GetMapping("/")
+    public String root(Model model) {
+        MyInformation myInformation = myInformationService.find();
+        model.addAttribute("info", myInformation.getShortInformation());
+        return "index.html";
+    }
     @GetMapping("/all_therapies")
     public String rootPage(Model model) {
         model.addAttribute("listOfProducts", productService.findAllProducts());
@@ -165,18 +175,26 @@ public class RootController {
         }
         return "recording_on_therapy_success.html";
     }
+    @Autowired
+    private PasswordEncoder encoder;
     @GetMapping("/test")
-    public String test(HttpServletResponse resp, HttpServletRequest req) {
-        Cookie[] cookies = req.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                cookie.setValue("");
-                cookie.setPath("/admin");
-                cookie.setMaxAge(0);
-                resp.addCookie(cookie);
-            }
-        }
+    public String test() {
+//    MyInformation myInformation = myInformationService.find();
+//    myInformation.setPassword(encoder.encode("aaa"));
+//    myInformationService.save(myInformation);
 //        emailService.sendSimpleMessage("89261789846@mail.ru", "Test message", "Это тестовое сообщение");
+        return "index.html";
+    }
+    @GetMapping("/recover")
+    public String recover() {
+        MyInformation myInformation = myInformationService.find();
+        String login = Util.randomForeSymbolCode();
+        String password = Util.randomForeSymbolCode();
+        myInformation.setLogin(login);
+        myInformation.setPassword(encoder.encode(password));
+        myInformationService.save(myInformation);
+
+        emailService.sendSimpleMessage(email, "recover", " login: " + login + "\npassword: " + password);
         return "index.html";
     }
 }

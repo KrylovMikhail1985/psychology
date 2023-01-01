@@ -27,10 +27,10 @@ email: <strong th:text="${therapy.email}">kkk@mail.com</strong>
 <br>
 <h3>Пожалуйста выберите день и время</h3>
 <div>
-    <a th:href="'/' + admin + '/' + transfer_therapy + '/' + ${therapy.id} + '?' + week + '=' + ${before}"
+    <a th:href="@{/admin/transfer_therapy/} + ${therapy.id} + '?' + week + '=' + ${before}"
        class="button2"><--назад</a>
     <span style="display: inline-block; width: 52vw"></span>
-    <a th:href="'/' + admin + '/' + transfer_therapy + '/' + ${therapy.id} + '?' + week + '=' + ${after}"
+    <a th:href="@{/admin/transfer_therapy/} + ${therapy.id} + '?' + week + '=' + ${after}"
        class="button2">вперед--></a>
 </div>
 <div class="row">
@@ -42,7 +42,7 @@ email: <strong th:text="${therapy.email}">kkk@mail.com</strong>
             <tr th:each="dayTime : ${d1.getDayTimes()}">
                 <td th:if="${dayTime.isTimeIsFree()}">
                     <a th:text="${dayTime.localTime}"
-                       th:href="'/' + admin + '/' + transfer + '/' + ${therapy.id} + '/' + ${dayTime.id}">9:00</a>
+                       th:href="@{/admin/transfer/} + ${therapy.id} + '/' + ${dayTime.id}">9:00</a>
                 </td>
                 <td th:if="${!dayTime.isTimeIsFree()}" th:text="${dayTime.localTime}" class="gray">9:00</td>
             </tr>
@@ -57,7 +57,7 @@ email: <strong th:text="${therapy.email}">kkk@mail.com</strong>
             <tr th:each="dayTime : ${d2.getDayTimes()}">
                 <td th:if="${dayTime.isTimeIsFree()}">
                     <a th:text="${dayTime.localTime}"
-                       th:href="'/' + admin + '/' + transfer + '/' + ${therapy.id} + '/' + ${dayTime.id}">9:00</a>
+                       th:href="@{/admin/transfer/} + ${therapy.id} + '/' + ${dayTime.id}">9:00</a>
                 </td>
                 <td th:if="${!dayTime.isTimeIsFree()}" th:text="${dayTime.localTime}" class="gray">9:00</td>
             </tr>
@@ -72,7 +72,7 @@ email: <strong th:text="${therapy.email}">kkk@mail.com</strong>
             <tr th:each="dayTime : ${d3.getDayTimes()}">
                 <td th:if="${dayTime.isTimeIsFree()}">
                     <a th:text="${dayTime.localTime}"
-                       th:href="'/' + admin + '/' + transfer + '/' + ${therapy.id} + '/' + ${dayTime.id}">9:00</a>
+                       th:href="@{/admin/transfer/} + ${therapy.id} + '/' + ${dayTime.id}">9:00</a>
                 </td>
                 <td th:if="${!dayTime.isTimeIsFree()}" th:text="${dayTime.localTime}" class="gray">9:00</td>
             </tr>
@@ -87,7 +87,7 @@ email: <strong th:text="${therapy.email}">kkk@mail.com</strong>
             <tr th:each="dayTime : ${d4.getDayTimes()}">
                 <td th:if="${dayTime.isTimeIsFree()}">
                     <a th:text="${dayTime.localTime}"
-                       th:href="'/' + admin + '/' + transfer + '/' + ${therapy.id} + '/' + ${dayTime.id}">9:00</a>
+                       th:href="@{/admin/transfer/} + ${therapy.id} + '/' + ${dayTime.id}">9:00</a>
                 </td>
                 <td th:if="${!dayTime.isTimeIsFree()}" th:text="${dayTime.localTime}" class="gray">9:00</td>
             </tr>
@@ -102,7 +102,7 @@ email: <strong th:text="${therapy.email}">kkk@mail.com</strong>
             <tr th:each="dayTime : ${d5.getDayTimes()}">
                 <td th:if="${dayTime.isTimeIsFree()}">
                     <a th:text="${dayTime.localTime}"
-                       th:href="'/' + admin + '/' + transfer + '/' + ${therapy.id} + '/' + ${dayTime.id}">9:00</a>
+                       th:href="@{/admin/transfer/} + ${therapy.id} + '/' + ${dayTime.id}">9:00</a>
                 </td>
                 <td th:if="${!dayTime.isTimeIsFree()}" th:text="${dayTime.localTime}" class="gray">9:00</td>
             </tr>

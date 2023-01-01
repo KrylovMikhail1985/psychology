@@ -27,7 +27,7 @@
 <div><span class="input">email: </span><strong th:text="${therapy.email}">email@email.com</strong></div>
 <div><span class="input">Телефон: </span><strong th:text="${therapy.phoneNumber}">8(000)000-00-00</strong></div>
 <br>
-<form th:action="'/' + confirm2 + '/' + ${product.id} + '/' + ${dayTime.id}" th:object="${therapy}">
+<form th:action="@{/confirm2/} + ${product.id} + '/' + ${dayTime.id}" th:object="${therapy}">
     <span th:if="${codeIsNotCorrect}">
         Вы ввели не тот код.
         Мы направили вам новый.
@@ -41,7 +41,7 @@
     <input class="center" style="width: 97.5vw; margin: 1vw" type="text" name="inputForeSymbolCode" placeholder="9999">
     <br><br>
     <input class="button" type="submit" value="Подтвердить">
+    <br>
 </form>
-<!--    <a th:href="'/' + confirm + '/' + ${product.id} + '/' + ${dayTime.id}" class="button">Подтвердить</a>-->
 </body>
 </html>

@@ -79,7 +79,7 @@ public class AdminController {
             token = jwtTokenProvider.createToken(login);
             Cookie loginCookie = new Cookie("auth_token", token);
             // living time in seconds
-            loginCookie.setMaxAge(60);
+            loginCookie.setMaxAge(60 * 60);
             response.addCookie(loginCookie);
             return "admin.html";
         }
@@ -440,7 +440,7 @@ public class AdminController {
         MyInformation myInformation = myInformationService.find();
         if (myInformation.getLogin().equals(oldLogin) && encoder.matches(oldPassword, myInformation.getPassword())) {
             myInformation.setLogin(newLogin);
-            myInformation.setPassword(newPassword);
+            myInformation.setPassword(encoder.encode(newPassword));
             myInformationService.save(myInformation);
             return "redirect:" + "/admin";
         }

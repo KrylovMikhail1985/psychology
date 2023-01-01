@@ -7,9 +7,6 @@ import krylov.psychology.model.Product;
 import krylov.psychology.model.Therapy;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.YearMonth;
@@ -90,13 +87,8 @@ public class Util {
     }
     public static Day thisDayWithActivatedDayTime(Day day, LocalTime startOfTherapy, LocalTime duration) {
         LocalTime endOfTherapy = startOfTherapy.plusHours(duration.getHour()).plusMinutes(duration.getMinute());
-        for (DayTime dayTime: day.getDayTimes()) {
-            LocalTime time = dayTime.getLocalTime();
-            if ((time.isAfter(startOfTherapy) || time.equals(startOfTherapy)) &&
-                    (time.isBefore(endOfTherapy) || time.equals(endOfTherapy))) {
-                dayTime.setTimeIsFree(true);
-            }
-        }
+
+        setAllDayTimesTo(true, day, startOfTherapy, endOfTherapy);
         return day;
     }
     private static boolean weHaveFalse(List<DayTime> dayTimeList, LocalTime startTime, LocalTime endTime) {
@@ -112,23 +104,8 @@ public class Util {
     }
     public static Day thisDayWithDeactivatedDayTimeIfNoTherapy(Day day, LocalTime startOfTherapy, LocalTime duration) {
         LocalTime endOfTherapy = startOfTherapy.plusHours(duration.getHour()).plusMinutes(duration.getMinute());
-        for (DayTime dayTime: day.getDayTimes()) {
-            LocalTime time = dayTime.getLocalTime();
-            if ((time.isAfter(startOfTherapy) || time.equals(startOfTherapy))
-                    && (time.isBefore(endOfTherapy) || time.equals(endOfTherapy))
-                    && !dayTime.isTimeIsFree()) {
-                System.out.println("Time: " + time + " is not active");
-                throw new RuntimeException("Time: " + time + " is not active");
-            }
-        }
-
-        for (DayTime dayTime: day.getDayTimes()) {
-            LocalTime time = dayTime.getLocalTime();
-            if ((time.isAfter(startOfTherapy) || time.equals(startOfTherapy)) &&
-                    (time.isBefore(endOfTherapy) || time.equals(endOfTherapy))) {
-                dayTime.setTimeIsFree(false);
-            }
-        }
+        checkThatAllDayTimesIsFree(day, startOfTherapy, endOfTherapy);
+        setAllDayTimesTo(false, day, startOfTherapy, endOfTherapy);
         return day;
     }
     public static String randomForeSymbolCode() {
@@ -182,15 +159,23 @@ public class Util {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         return simpleDateFormat.format(date);
     }
-    public static void deleteAuthCookie(HttpServletRequest req,
-                                        HttpServletResponse resp) {
-        Cookie[] cookies = req.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                cookie.setValue("");
-                cookie.setPath("/");
-                cookie.setMaxAge(0);
-                resp.addCookie(cookie);
+    private static void checkThatAllDayTimesIsFree(Day day, LocalTime startOfTherapy, LocalTime endOfTherapy) {
+        for (DayTime dayTime: day.getDayTimes()) {
+            LocalTime time = dayTime.getLocalTime();
+            if ((time.isAfter(startOfTherapy) || time.equals(startOfTherapy))
+                    && (time.isBefore(endOfTherapy) || time.equals(endOfTherapy))
+                    && !dayTime.isTimeIsFree()) {
+                System.out.println("Time: " + time + " is not active");
+                throw new RuntimeException("Time: " + time + " is not active");
+            }
+        }
+    }
+    private static void setAllDayTimesTo(boolean b, Day day, LocalTime startOfTherapy, LocalTime endOfTherapy) {
+        for (DayTime dayTime: day.getDayTimes()) {
+            LocalTime time = dayTime.getLocalTime();
+            if ((time.isAfter(startOfTherapy) || time.equals(startOfTherapy)) &&
+                    (time.isBefore(endOfTherapy) || time.equals(endOfTherapy))) {
+                dayTime.setTimeIsFree(b);
             }
         }
     }

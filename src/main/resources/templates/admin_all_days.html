@@ -15,16 +15,16 @@
     <a href="/admin">Администратор</a>
 </nav>
 <div>
-    <a th:href="all_days + '?' + week + '=' + ${before}" class="button2"><--назад</a>
+    <a th:href="@{all_days?week=} + ${before}" class="button2"><--назад</a>
     <span style="display: inline-block; width: 52vw"></span>
-    <a th:href="all_days + '?' + week + '=' + ${after}" class="button2">вперед--></a>
+    <a th:href="@{all_days?week=} + ${after}" class="button2">вперед--></a>
 </div>
 <div class="row">
     <div class="column">
         <table>
             <tr>
                 <th>
-                    <a th:href="admin_one_day + '/' + ${d1.getDate().getTime()}" th:text="${#dates.format(d1.date, 'EE dd.MM')}">
+                    <a th:href="@{admin_one_day/} + ${d1.getDate().getTime()}" th:text="${#dates.format(d1.date, 'EE dd.MM')}">
                         01.02.2022
                     </a>
                 </th>
@@ -38,7 +38,7 @@
     <div class="column">
         <table>
             <th>
-                <a th:href="admin_one_day + '/' + ${d2.getDate().getTime()}" th:text="${#dates.format(d2.date, 'EE dd.MM')}">
+                <a th:href="@{admin_one_day/} + ${d2.getDate().getTime()}" th:text="${#dates.format(d2.date, 'EE dd.MM')}">
                     01.02.2022
                 </a>
             </th>
@@ -51,7 +51,7 @@
     <div class="column">
         <table>
             <th>
-                <a th:href="admin_one_day + '/' + ${d3.getDate().getTime()}" th:text="${#dates.format(d3.date, 'EE dd.MM')}">
+                <a th:href="@{admin_one_day/} + ${d3.getDate().getTime()}" th:text="${#dates.format(d3.date, 'EE dd.MM')}">
                     01.02.2022
                 </a>
             </th>
@@ -64,7 +64,7 @@
     <div class="column">
         <table>
             <th>
-                <a th:href="admin_one_day + '/' + ${d4.getDate().getTime()}" th:text="${#dates.format(d4.date, 'EE dd.MM')}">
+                <a th:href="@{admin_one_day/} + ${d4.getDate().getTime()}" th:text="${#dates.format(d4.date, 'EE dd.MM')}">
                     01.02.2022
                 </a>
             </th>
@@ -77,7 +77,7 @@
     <div class="column">
         <table>
             <th>
-                <a th:href="admin_one_day + '/' + ${d5.getDate().getTime()}" th:text="${#dates.format(d5.date, 'EE dd.MM')}">
+                <a th:href="@{admin_one_day/} + ${d5.getDate().getTime()}" th:text="${#dates.format(d5.date, 'EE dd.MM')}">
                     01.02.2022
                 </a>
             </th>

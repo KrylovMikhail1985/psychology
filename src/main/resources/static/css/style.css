@@ -57,6 +57,15 @@ table {
 table a {
     color: blue
     }
+img {
+    margin-left: 0.5rem;
+    max-width: 50%;
+    float: right;
+    }
+.text-all-width {
+    margin: 0.5rem;
+    text-align: justify;
+    }
 .center {
     text-align: center;
     }

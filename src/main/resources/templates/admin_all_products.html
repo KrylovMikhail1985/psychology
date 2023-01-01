@@ -30,9 +30,9 @@
         <td th:text="${prod.productName}">Наименование продукта</td>
         <td th:text="${prod.cost}">1000</td>
         <td th:text="${prod.duration}">999</td>
-        <td><a th:text="${prod.actual}" th:href="active_product + '/' + ${prod.id}">true</a></td>
+        <td><a th:text="${prod.actual}" th:href="@{active_product/} + ${prod.id}">true</a></td>
         <td th:text="${prod.priority}">9</td>
-        <td><a th:href="show_one_product + '/' + ${prod.id}">подробнее</a></td>
+        <td><a th:href="@{show_one_product/} + ${prod.id}">подробнее</a></td>
 <!--        <td><a th:href="delete_product + '/' + ${prod.id}">удалить</a></td>-->
     </tr>
 </table>

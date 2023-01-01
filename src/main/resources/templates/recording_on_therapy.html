@@ -20,9 +20,9 @@
 <h3 th:if="${timeIsOccupy}" style="background: red">Выбранное время уже заняли. Пожалуйста, выберите другое время</h3>
 <h3 th:if="!${timeIsOccupy}">Пожалуйста выберите день и время</h3>
 <div>
-    <a th:href="'/' + record + '/' + ${product.id} + '?' + week + '=' + ${before}" class="button2"><--назад</a>
+    <a th:href="@{/record/} + ${product.id} + @{?week=} + ${before}" class="button2"><--назад</a>
     <span style="display: inline-block; width: 52vw"></span>
-    <a th:href="'/' + record + '/' + ${product.id} + '?' + week + '=' + ${after}" class="button2">вперед--></a>
+    <a th:href="@{/record/} + ${product.id} + @{?week=} + ${after}" class="button2">вперед--></a>
 </div>
 <div class="row">
     <div class="column">
@@ -33,7 +33,7 @@
             <tr th:each="dayTime : ${d1.getDayTimes()}">
                 <td th:if="${dayTime.isTimeIsFree()}">
                     <a th:text="${dayTime.localTime}"
-                       th:href="'/' + record + '/' + ${product.id} + '/' + ${dayTime.id}">9:00</a>
+                       th:href="@{/record/} + ${product.id} + '/' + ${dayTime.id}">9:00</a>
                 </td>
                 <td th:if="${!dayTime.isTimeIsFree()}" th:text="${dayTime.localTime}" class="gray">9:00</td>
             </tr>
@@ -48,7 +48,7 @@
             <tr th:each="dayTime : ${d2.getDayTimes()}">
                 <td th:if="${dayTime.isTimeIsFree()}">
                     <a th:text="${dayTime.localTime}"
-                       th:href="'/' + record + '/' + ${product.id} + '/' + ${dayTime.id}">9:00</a>
+                       th:href="@{/record/} + ${product.id} + '/' + ${dayTime.id}">9:00</a>
                 </td>
                 <td th:if="${!dayTime.isTimeIsFree()}" th:text="${dayTime.localTime}" class="gray">9:00</td>
             </tr>
@@ -63,7 +63,7 @@
             <tr th:each="dayTime : ${d3.getDayTimes()}">
                 <td th:if="${dayTime.isTimeIsFree()}">
                     <a th:text="${dayTime.localTime}"
-                       th:href="'/' + record + '/' + ${product.id} + '/' + ${dayTime.id}">9:00</a>
+                       th:href="@{/record/} + ${product.id} + '/' + ${dayTime.id}">9:00</a>
                 </td>
                 <td th:if="${!dayTime.isTimeIsFree()}" th:text="${dayTime.localTime}" class="gray">9:00</td>
             </tr>
@@ -78,7 +78,7 @@
             <tr th:each="dayTime : ${d4.getDayTimes()}">
                 <td th:if="${dayTime.isTimeIsFree()}">
                     <a th:text="${dayTime.localTime}"
-                       th:href="'/' + record + '/' + ${product.id} + '/' + ${dayTime.id}">9:00</a>
+                       th:href="@{/record/} + ${product.id} + '/' + ${dayTime.id}">9:00</a>
                 </td>
                 <td th:if="${!dayTime.isTimeIsFree()}" th:text="${dayTime.localTime}" class="gray">9:00</td>
             </tr>
@@ -93,7 +93,7 @@
             <tr th:each="dayTime : ${d5.getDayTimes()}">
                 <td th:if="${dayTime.isTimeIsFree()}">
                     <a th:text="${dayTime.localTime}"
-                       th:href="'/' + record + '/' + ${product.id} + '/' + ${dayTime.id}">9:00</a>
+                       th:href="@{/record/} + ${product.id} + '/' + ${dayTime.id}">9:00</a>
                 </td>
                 <td th:if="${!dayTime.isTimeIsFree()}" th:text="${dayTime.localTime}" class="gray">9:00</td>
             </tr>

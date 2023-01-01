@@ -27,17 +27,15 @@
     <tr th:each="dayTime : ${dayTimeList}">
         <td th:text="${dayTime.localTime}">11:40</td>
         <td th:if="${dayTime.timeIsFree}"><a th:text="${dayTime.timeIsFree}"
-               th:href="'/' + admin + '/' + daytime_active + '/'
-               + ${dayTime.id} + '/' + ${day.getDate().getTime()}">true</a></td>
+               th:href="@{/admin/daytime_active/} + ${dayTime.id} + '/' + ${day.getDate().getTime()}">true</a></td>
         <td th:if="${dayTime.timeIsFree} == false" class="emit"><a th:text="${dayTime.timeIsFree}"
-               th:href="'/' + admin + '/' + daytime_active + '/'
-               + ${dayTime.id} + '/' + ${day.getDate().getTime()}">true</a></td>
-        <td th:if="${dayTime.getTherapy()} != null"><a th:href="'/' + admin + '/' + one_therapy + '/' + ${dayTime.id}">терапия</a></td>
+               th:href="@{/admin/daytime_active/} + ${dayTime.id} + '/' + ${day.getDate().getTime()}">true</a></td>
+        <td th:if="${dayTime.getTherapy()} != null"><a th:href="@{/admin/one_therapy/} + ${dayTime.id}">терапия</a></td>
         <td th:if="${dayTime.getTherapy()} == null"></td>
     </tr>
 </table>
 <br>
 <a th:if="${thereIsNoTherapyThisDay}" class="button"
-   th:href="'/' + admin + '/' + delete_day + '/' + ${day.getId()}">удалить день</a>
+   th:href="@{/admin/delete_day/} + ${day.getId()}">удалить день</a>
 </body>
 </html>
