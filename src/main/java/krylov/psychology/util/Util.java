@@ -179,4 +179,11 @@ public class Util {
             }
         }
     }
+    public static Date dateTomorrow(Date today) {
+        int year = today.getYear();
+        int month = today.getMonth();
+        int day1 = today.getDay() + 1;
+        Date tomorrow = new Date(year, month, day1 + 1);
+        return tomorrow;
+    }
 }

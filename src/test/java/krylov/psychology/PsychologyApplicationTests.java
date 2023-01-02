@@ -1,8 +1,10 @@
 package krylov.psychology;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.junit5.api.DBRider;
+import krylov.psychology.util.Util;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -20,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.Cookie;
 
+import java.util.Date;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -34,6 +37,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 class PsychologyApplicationTests {
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
+    private long longData = Util.dateTomorrow(new Date()).getTime();
     private String headerBearer;
 
 //    @RegisterExtension
@@ -58,6 +64,17 @@ class PsychologyApplicationTests {
                 this.headerBearer = cookies[i].getValue();
             }
         }
+
+        Date tomorrow = Util.dateTomorrow(new Date());
+        String longDay = String.valueOf(tomorrow.getTime());
+        MockHttpServletResponse response1 =
+                mockMvc.perform(post("/admin/post_create_new_day")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + headerBearer)
+                        .param("dataTime", longDay)
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .accept(MediaType.APPLICATION_JSON)
+                ).andReturn().getResponse();
+        assertThat(response1.getStatus()).isEqualTo(302);
     }
 
     @Test
@@ -123,12 +140,11 @@ class PsychologyApplicationTests {
 //                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + headerBearer)
 //                            .param("productName", "Therapy")
 //                            .param("cost", "3000")
-//                            .param("duration", "02:30:00")
+//                            .param("duration", "03:00:00")
 //                            .param("description", "какое-то описание")
 //                            .param("actual", "true")
 //                            .param("priority", "6")
 //                            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-//                            .accept(MediaType.APPLICATION_JSON)
 //                    ).andReturn().getResponse();
 //            assertThat(response.getStatus()).isEqualTo(302);
 //        }
@@ -186,9 +202,9 @@ class PsychologyApplicationTests {
 //            MockHttpServletResponse response =
 //                    mockMvc.perform(post("/admin/update_product/2")
 //                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + headerBearer)
-//                            .param("productName", "New product")
-//                            .param("cost", "3500")
-//                            .param("duration", "2:30")
+//                            .param("productName", "NewProduct")
+//                            .param("cost", "3000000")
+//                            .param("duration", "04:30")
 //                            .param("description", "какое-то описание")
 //                            .param("actual", "true")
 //                            .param("priority", "6")
@@ -294,7 +310,39 @@ class PsychologyApplicationTests {
         }
     }
     @Nested
-    @DisplayName("Tests for the products")
+    @DisplayName("Create Month")
+    class SomeTests {
+        @Test
+        public void activeNextMonthGet() throws Exception {
+            MockHttpServletResponse response =
+                    mockMvc.perform(get("/admin/active_new_month")
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + headerBearer)
+                    ).andReturn().getResponse();
+            assertThat(response.getStatus()).isEqualTo(200);
+        }
+        @Test
+        public void activeNewMonthPost() throws Exception {
+            Date today = new Date();
+            Integer month = today.getMonth();
+            Integer year = today.getYear();
+            String str = "10=10&20=20";
+
+            MockHttpServletResponse response =
+                    mockMvc.perform(post("/admin/active_new_month")
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + headerBearer)
+                            .param("month", Integer.toString(month))
+                            .param("year", Integer.toString(year))
+                            .content(str)
+                            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                            .accept(MediaType.APPLICATION_JSON)
+                    ).andReturn().getResponse();
+            assertThat(response.getStatus()).isEqualTo(302);
+
+
+        }
+    }
+    @Nested
+    @DisplayName("Tests for Days")
     class DayTest {
         @Test
         public void showAllWorkingDays() throws Exception {
@@ -303,6 +351,71 @@ class PsychologyApplicationTests {
                             .header(HttpHeaders.AUTHORIZATION, "Bearer " + headerBearer)
                     ).andReturn().getResponse();
             assertThat(response.getStatus()).isEqualTo(200);
+        }
+        @Test
+        public void showExistedDay() throws Exception {
+            MockHttpServletResponse response =
+                    mockMvc.perform(get("/admin/admin_one_day/" + longData)
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + headerBearer)
+                    ).andReturn().getResponse();
+            assertThat(response.getStatus()).isEqualTo(200);
+            assertThat(response.getContentAsString()).contains("05:00", "06:00");
+        }
+        @Test
+        public void showNoyExistedDay() throws Exception {
+            MockHttpServletResponse response =
+                    mockMvc.perform(get("/admin/admin_one_day/0")
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + headerBearer)
+                    ).andReturn().getResponse();
+            assertThat(response.getStatus()).isEqualTo(200);
+            assertThat(response.getContentAsString()).contains("Открыть запись на данный день");
+        }
+        @Test
+        public void deleteDayTest() throws Exception {
+            MockHttpServletResponse response =
+                    mockMvc.perform(get("/admin/delete_day/1")
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + headerBearer)
+                    ).andReturn().getResponse();
+            assertThat(response.getStatus()).isEqualTo(302);
+
+            MockHttpServletResponse response1 =
+                    mockMvc.perform(get("/admin/all_days")
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + headerBearer)
+                    ).andReturn().getResponse();
+            assertThat(response1.getStatus()).isEqualTo(200);
+            assertThat(response1.getContentAsString()).doesNotContain("05:00", "06:00");
+        }
+//        @Test
+//        public void createNewDay() throws Exception {
+//            Date date = new Date();
+//            int year = date.getYear();
+//            int month = date.getMonth();
+//            int day1 = date.getDay() + 1;
+//            Date tomorrow = new Date(year, month, day1 + 1);
+//            String longDay = String.valueOf(tomorrow.getTime());
+//            MockHttpServletResponse response1 =
+//                    mockMvc.perform(post("/admin/post_create_new_day")
+//                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + headerBearer)
+//                            .param("dataTime", longDay)
+//                            .accept(MediaType.APPLICATION_JSON)
+//                    ).andReturn().getResponse();
+//            assertThat(response1.getStatus()).isEqualTo(302);
+//        }
+        @Test
+        public void deactivateTime() throws Exception {
+            Date tomorrow = Util.dateTomorrow(new Date());
+            MockHttpServletResponse response =
+                    mockMvc.perform(get("/admin/daytime_active/2/" + tomorrow.getTime())
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + headerBearer)
+                    ).andReturn().getResponse();
+            assertThat(response.getStatus()).isEqualTo(302);
+
+            MockHttpServletResponse response1 =
+                    mockMvc.perform(get("/admin/admin_one_day/" + tomorrow.getTime())
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + headerBearer)
+                    ).andReturn().getResponse();
+            assertThat(response1.getStatus()).isEqualTo(200);
+            assertThat(response1.getContentAsString()).contains("false");
         }
     }
 }

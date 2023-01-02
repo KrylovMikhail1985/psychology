@@ -45,12 +45,12 @@
     <input class="checkbox" type="checkbox" name="27" value="27"><span class="checkbox2">27</span>
     <input class="checkbox" type="checkbox" name="28" value="28"><span class="checkbox2">28</span>
     <br/>
-    <input class="checkbox" th:if="${countOfDays} > 28" type="checkbox" name="29" value="29"><span class="checkbox2">29
-</span>
-    <input class="checkbox" th:if="${countOfDays} > 29" type="checkbox" name="30" value="30"><span class="checkbox2">30
-</span>
-    <input class="checkbox" th:if="${countOfDays} > 30" type="checkbox" name="31" value="31"><span class="checkbox2">31
-</span>
+    <input th:if="${countOfDays} > 28" class="checkbox" type="checkbox" name="29" value="29">
+    <span th:if="${countOfDays} > 28" class="checkbox2">29</span>
+    <input th:if="${countOfDays} > 29" class="checkbox" type="checkbox" name="30" value="30">
+    <span th:if="${countOfDays} > 29" class="checkbox2">30</span>
+    <input th:if="${countOfDays} > 30" class="checkbox" type="checkbox" name="31" value="31">
+    <span th:if="${countOfDays} > 30" class="checkbox2">31</span>
     <input type="month" hidden="hidden" name="month" th:value="${month}">
     <input type="text" hidden="hidden" name="year" th:value="${year}">
     <br><br>

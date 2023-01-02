@@ -124,9 +124,9 @@ public class AdminController {
 
     }
     @PostMapping("/update_product/{id}")
-    public String updateProductPost(@PathVariable(name = "id") long id,
-                                    @Valid Product product, BindingResult bindingResult,
-                                    Model model) {
+    public String updateProductPost(@Valid Product product,
+                                    BindingResult bindingResult,
+                                    @PathVariable(name = "id") long id) {
         if (bindingResult.hasErrors()) {
             return "admin_update_product.html";
         }
@@ -182,11 +182,9 @@ public class AdminController {
     @PostMapping("/active_new_month")
     public String activeNewMonth(@RequestParam(name = "month") Integer month,
                                  @RequestParam(name = "year") Integer year,
-                                 @RequestBody MultiValueMap<String, String> formData,
-                                 Model model) {
+                                 @RequestBody MultiValueMap<String, String> formData) {
         formData.remove("month");
         formData.remove("year");
-
         //change MultiValueMap to List<Integer>
         List<Integer> listOfDays = new ArrayList<>();
         for (Map.Entry<String, List<String>> map: formData.entrySet()) {
@@ -283,8 +281,8 @@ public class AdminController {
             return "admin_new_day.html";
         }
     }
-    @GetMapping("daytime_active/{id}/{longDate}")
-    public String activateDayTime(@PathVariable(name = "id") long dayTimeId,
+    @GetMapping("daytime_active/{dayTimeId}/{longDate}")
+    public String activateDayTime(@PathVariable(name = "dayTimeId") long dayTimeId,
                                   @PathVariable(name = "longDate") long longDate,
                                   Model model) {
         DayTime dayTime = dayTimeService.findById(dayTimeId);
@@ -295,7 +293,6 @@ public class AdminController {
     }
     @PostMapping("post_create_new_day")
     public String createNewDay(@RequestParam(name = "dataTime") long longDate) {
-
         List<DefaultTime> defaultTimeList = defaultTimeService.findAllDefaultTimeSortedByTime();
         Day day = new Day();
         day.setDate(new Date(longDate));
