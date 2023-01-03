@@ -1,15 +1,20 @@
-//package krylov.psychology.config;
-//
-//import org.springframework.beans.factory.annotation.Value;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//import org.springframework.mail.javamail.JavaMailSender;
-//import org.springframework.mail.javamail.JavaMailSenderImpl;
-//
-//import java.util.Properties;
-//
-//@Configuration
-//public class ApplicationConfiguration {
+package krylov.psychology.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.util.Date;
+import java.util.TimeZone;
+
+@Configuration
+public class ApplicationConfiguration {
+    @Bean
+    public TimeZone timeZone() {
+        TimeZone defaultTimeZone = TimeZone.getTimeZone("GMT+3");
+        TimeZone.setDefault(defaultTimeZone);
+        System.out.println("Spring boot application running in GMT+3 timezone :" + new Date());
+        return defaultTimeZone;
+    }
 //    @Value("${email}")
 //    private String email;
 //    @Value("${mailPassword}")
@@ -33,5 +38,5 @@
 //
 //        return mailSender;
 //    }
-//
-//}
+
+}

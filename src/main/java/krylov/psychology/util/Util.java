@@ -121,7 +121,7 @@ public class Util {
 
         return "Добрый день, " + therapy.getName() + "!"
                 + "\nВы подали заявку на услугу \"" + product.getProductName() + "\"."
-                + "\nВстреча запланирована на " + date + " в " + dayTime.getLocalTime()
+                + "\nДата и время встречи: " + date + " в " + dayTime.getLocalTime()
                 + "\nПродолжительность встречи " + duration
                 + "\nСтоимость " + product.getCost() + " рублей."
                 + "\n\nДля подтверждения записи укажите данный код подтверждения: " + code;
@@ -135,8 +135,8 @@ public class Util {
 
         return "Добрый день, " + therapy.getName() + "!"
                 + "\nВаша запись на услугу \"" + product.getProductName() + "\" была перенесена."
-                + "\nТеперь встреча запланирована на " + date + " в " + dayTime.getLocalTime()
-                + "\nПродолжительность встречи " + duration
+                + "\nОбновленная дата и время встречи: " + date + " в " + dayTime.getLocalTime()
+                + "\nПродолжительность встречи: " + duration
                 + "\nСтоимость " + product.getCost() + " рублей."
                 + "\n\nХорошего дня!";
     }
@@ -180,6 +180,7 @@ public class Util {
         }
     }
     public static Date dateTomorrow(Date today) {
+        today.setHours(0);
         int year = today.getYear();
         int month = today.getMonth();
         int day1 = today.getDay() + 1;

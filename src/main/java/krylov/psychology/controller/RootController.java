@@ -40,6 +40,8 @@ public class RootController {
     private TherapyServiceImpl therapyService;
     @Autowired
     private MyInformationServiceImpl myInformationService;
+    @Autowired
+    private PasswordEncoder encoder;
     @Value("${email}")
     private String email;
     private final long dayInt = 86400000;
@@ -50,7 +52,7 @@ public class RootController {
         return "index.html";
     }
     @GetMapping("/all_therapies")
-    public String rootPage(Model model) {
+    public String showAllProduct(Model model) {
         model.addAttribute("listOfProducts", productService.findAllProducts());
         return "all_products.html";
     }
@@ -174,16 +176,6 @@ public class RootController {
             return "redirect:" + "/record/" + product.getId() + "?timeIsOccupy=true";
         }
         return "recording_on_therapy_success.html";
-    }
-    @Autowired
-    private PasswordEncoder encoder;
-    @GetMapping("/test")
-    public String test() {
-//    MyInformation myInformation = myInformationService.find();
-//    myInformation.setPassword(encoder.encode("aaa"));
-//    myInformationService.save(myInformation);
-//        emailService.sendSimpleMessage("89261789846@mail.ru", "Test message", "Это тестовое сообщение");
-        return "index.html";
     }
     @GetMapping("/recover")
     public String recover() {

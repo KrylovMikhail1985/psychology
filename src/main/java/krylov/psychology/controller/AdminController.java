@@ -315,26 +315,29 @@ public class AdminController {
     @GetMapping("one_therapy/{dayTimeId}")
     public String onrTherapy(@PathVariable(name = "dayTimeId") long dayTimeId,
                              Model model) {
-        DayTime dayTime = dayTimeService.findById(dayTimeId);
-        Therapy therapy = dayTime.getTherapy();
-        Product product = therapy.getProduct();
-        Day day = dayTime.getDay();
-        model.addAttribute("day", day);
-        model.addAttribute("dayTime", dayTime);
-        model.addAttribute("product", product);
-        model.addAttribute("therapy", therapy);
-
+        try {
+            DayTime dayTime = dayTimeService.findById(dayTimeId);
+            Therapy therapy = dayTime.getTherapy();
+            Product product = therapy.getProduct();
+            Day day = dayTime.getDay();
+            model.addAttribute("day", day);
+            model.addAttribute("dayTime", dayTime);
+            model.addAttribute("product", product);
+            model.addAttribute("therapy", therapy);
+        } catch (Exception e) {
+            System.out.println("There is not therapy in dayTime with dayTimeID: " + dayTimeId);
+        }
         return "admin_therapy.html";
     }
-    @GetMapping("delete_therapy/{therapyId}/{dayLong}")
+    @PostMapping("delete_therapy/{therapyId}")
     public String deleteTherapy(@PathVariable(name = "therapyId") long therapyId,
-                                 @PathVariable(name = "dayLong") long dayLong,
                                  @RequestParam(name = "y", required = false) String  y,
                                  @RequestParam(name = "e", required = false) String  e,
                                  @RequestParam(name = "s", required = false) String  s) {
+        Therapy therapy = therapyService.findById(therapyId);
+        Day day = therapy.getDayTime().getDay();
+        long dayLong = day.getDate().getTime();
         if (y != null && e != null && s != null) {
-            Day day = dayService.findDayByDate(new Date(dayLong));
-            Therapy therapy = therapyService.findById(therapyId);
             LocalTime localTimeTherapy = therapy.getDayTime().getLocalTime();
             Day dayFromDelTherapy =
                     Util.thisDayWithActivatedDayTime(day, localTimeTherapy, therapy.getProduct().getDuration());

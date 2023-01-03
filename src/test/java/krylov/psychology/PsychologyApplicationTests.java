@@ -4,6 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.junit5.api.DBRider;
+import krylov.psychology.service.DayServiceImpl;
+import krylov.psychology.service.DayTimeServiceImpl;
+import krylov.psychology.service.ProductServiceImpl;
+import krylov.psychology.service.TherapyServiceImpl;
 import krylov.psychology.util.Util;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -39,6 +43,14 @@ class PsychologyApplicationTests {
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private DayServiceImpl dayService;
+    @Autowired
+    private DayTimeServiceImpl dayTimeService;
+    @Autowired
+    private TherapyServiceImpl therapyService;
+    @Autowired
+    private ProductServiceImpl productService;
     private long longData = Util.dateTomorrow(new Date()).getTime();
     private String headerBearer;
 
@@ -56,7 +68,6 @@ class PsychologyApplicationTests {
                         .param("login", "admin")
                         .param("password", "admin")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .accept(MediaType.APPLICATION_JSON)
                 ).andReturn().getResponse();
         Cookie[] cookies = response.getCookies();
         for (var i = 0; i < cookies.length; i++) {
@@ -373,7 +384,7 @@ class PsychologyApplicationTests {
         @Test
         public void deleteDayTest() throws Exception {
             MockHttpServletResponse response =
-                    mockMvc.perform(get("/admin/delete_day/1")
+                    mockMvc.perform(get("/admin/delete_day/2")
                             .header(HttpHeaders.AUTHORIZATION, "Bearer " + headerBearer)
                     ).andReturn().getResponse();
             assertThat(response.getStatus()).isEqualTo(302);
@@ -405,7 +416,7 @@ class PsychologyApplicationTests {
         public void deactivateTime() throws Exception {
             Date tomorrow = Util.dateTomorrow(new Date());
             MockHttpServletResponse response =
-                    mockMvc.perform(get("/admin/daytime_active/2/" + tomorrow.getTime())
+                    mockMvc.perform(get("/admin/daytime_active/5/" + tomorrow.getTime())
                             .header(HttpHeaders.AUTHORIZATION, "Bearer " + headerBearer)
                     ).andReturn().getResponse();
             assertThat(response.getStatus()).isEqualTo(302);
@@ -418,4 +429,166 @@ class PsychologyApplicationTests {
             assertThat(response1.getContentAsString()).contains("false");
         }
     }
+    @Nested
+    @DisplayName("root tests")
+    class RootTest {
+        @Test
+        public void rootPage() throws Exception {
+            MockHttpServletResponse response =
+                    mockMvc.perform(get("/")
+                    ).andReturn().getResponse();
+            assertThat(response.getStatus()).isEqualTo(200);
+            assertThat(response.getContentAsString()).contains("Услуги");
+        }
+        @Test
+        public void showAllProduct() throws Exception {
+            MockHttpServletResponse response =
+                    mockMvc.perform(get("/all_therapies")
+                    ).andReturn().getResponse();
+            assertThat(response.getStatus()).isEqualTo(200);
+            assertThat(response.getContentAsString()).contains("Терапия 2");
+            assertThat(response.getContentAsString()).doesNotContain("Терапия 1");
+        }
+        @Test
+        public void showOneProductTest() throws Exception {
+            MockHttpServletResponse response =
+                    mockMvc.perform(get("/product/2")
+                    ).andReturn().getResponse();
+            assertThat(response.getStatus()).isEqualTo(200);
+            assertThat(response.getContentAsString()).contains("Терапия 2");
+        }
+        @Test
+        public void recordingOnTherapyTest() throws Exception {
+            MockHttpServletResponse response =
+                    mockMvc.perform(get("/record/2")
+                    ).andReturn().getResponse();
+            assertThat(response.getStatus()).isEqualTo(200);
+            assertThat(response.getContentAsString()).contains("Пожалуйста выберите день и время", "05:00");
+            assertThat(response.getContentAsString()).doesNotContain("Выбранное время уже заняли");
+        }
+        @Test
+        public void recordingOnTherapyNextWeekTest() throws Exception {
+            MockHttpServletResponse response =
+                    mockMvc.perform(get("/record/2?week=5")
+                    ).andReturn().getResponse();
+            assertThat(response.getStatus()).isEqualTo(200);
+            assertThat(response.getContentAsString()).contains("Пожалуйста выберите день и время");
+            assertThat(response.getContentAsString()).doesNotContain("05:00, Выбранное время уже заняли");
+        }
+        @Test
+        public void recordingOnTherapyTimeIsOccupyTest() throws Exception {
+            MockHttpServletResponse response =
+                    mockMvc.perform(get("/record/2?timeIsOccupy=true")
+                    ).andReturn().getResponse();
+            assertThat(response.getStatus()).isEqualTo(200);
+            assertThat(response.getContentAsString()).contains("Выбранное время уже заняли");
+        }
+        @Test
+        public void recordingOnTherapy2Test() throws Exception {
+            MockHttpServletResponse response =
+                    mockMvc.perform(get("/record/2/2")
+                    ).andReturn().getResponse();
+            assertThat(response.getStatus()).isEqualTo(200);
+            assertThat(response.getContentAsString()).contains("Терапия 2", "06:00",
+                    "Пожалуйста введите контактные данные");
+            assertThat(response.getContentAsString()).doesNotContain("Вы ввели не тот код", "05:00");
+        }
+//        @Test
+//        public void recordingOnTherapy3Test() throws Exception {
+//            MockHttpServletResponse response =
+//                    mockMvc.perform(get("/confirm/2/2")
+//                            .param("name", "admin")
+//                            .param("email", "admin@admin.com")
+//                            .param("phoneNumber", "412342")
+//                            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+//                            .accept(MediaType.APPLICATION_JSON)
+//                    ).andReturn().getResponse();
+//            assertThat(response.getStatus()).isEqualTo(200);
+//        }
+        @Test
+        public void oneTherapyTest() throws Exception {
+            MockHttpServletResponse response =
+                    mockMvc.perform(get("/admin/one_therapy/2")
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + headerBearer)
+                    ).andReturn().getResponse();
+            assertThat(response.getStatus()).isEqualTo(200);
+            assertThat(response.getContentAsString()).contains("admin", "Терапия 3", "06:00");
+            assertThat(response.getContentAsString()).doesNotContain("05:00");
+        }
+        @Test
+        public void deleteTherapyTest() throws Exception {
+            String str = "y=y&e=e&s=s";
+            MockHttpServletResponse response =
+                    mockMvc.perform(post("/admin/delete_therapy/1/")
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + headerBearer)
+                            .content(str)
+                            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    ).andReturn().getResponse();
+            assertThat(response.getStatus()).isEqualTo(302);
+
+//            MockHttpServletResponse response1 =
+//                    mockMvc.perform(get("/admin/one_therapy/2")
+//                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + headerBearer)
+//                    ).andReturn().getResponse();
+//            assertThat(response1.getStatus()).isEqualTo(200);
+//            assertThat(response1.getContentAsString()).contains("stgestrge");
+
+//            boolean therapyIsDeleted = false;
+//            try {
+//                mockMvc.perform(get("/admin/one_therapy/2")
+//                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + headerBearer)
+//                ).andReturn().getResponse();
+//            } catch (Exception e) {
+//                therapyIsDeleted = true;
+//            }
+//            assertThat(therapyIsDeleted).isTrue();
+        }
+        @Test
+        public void transferTherapyChooseDayTest() throws Exception {
+            MockHttpServletResponse response =
+                    mockMvc.perform(get("/admin/transfer_therapy/1/")
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + headerBearer)
+                    ).andReturn().getResponse();
+            assertThat(response.getStatus()).isEqualTo(200);
+            assertThat(response.getContentAsString()).contains("05:00");
+        }
+//        @Test
+//        public void transferTherapyConfirmTest() throws Exception {
+//            MockHttpServletResponse response =
+//                    mockMvc.perform(get("/admin/transfer/1/5")
+//                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + headerBearer)
+//                    ).andReturn().getResponse();
+//            assertThat(response.getStatus()).isEqualTo(302);
+//            assertThat(response.getContentAsString()).doesNotContain("терапия");
+//        }
+        @Test
+        public void getMyInfoTest() throws Exception {
+            MockHttpServletResponse response =
+                    mockMvc.perform(get("/admin/info")
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + headerBearer)
+                    ).andReturn().getResponse();
+            assertThat(response.getStatus()).isEqualTo(200);
+            assertThat(response.getContentAsString()).contains("Обновить информацию");
+        }
+        @Test
+        public void updateMyInfoTest() throws Exception {
+            MockHttpServletResponse response =
+                    mockMvc.perform(post("/admin/update_info")
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + headerBearer)
+                            .param("shortInformation", "Информация обо мне")
+                            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    ).andReturn().getResponse();
+            assertThat(response.getStatus()).isEqualTo(200);
+        }
+        @Test
+        public void updateLoginTest() throws Exception {
+            MockHttpServletResponse response =
+                    mockMvc.perform(get("/admin/update_login_info")
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + headerBearer)
+                    ).andReturn().getResponse();
+            assertThat(response.getStatus()).isEqualTo(200);
+            assertThat(response.getContentAsString()).contains("логин");
+        }
+    }
+
 }

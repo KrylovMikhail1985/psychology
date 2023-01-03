@@ -37,7 +37,7 @@ Email: <strong th:text="${therapy.email}">Email@mail.com</strong>
 </body>
 <br>
 <a th:href="@{/admin/transfer_therapy/} + ${therapy.id}" class="button">перенести запись</a>
-<form th:action="@{/admin/delete_therapy/} + ${therapy.id} + '/' + ${day.getDate().getTime()}">
+<form th:action="@{/admin/delete_therapy/} + ${therapy.id}" method="post">
     <input class="checkbox" type="checkbox" name="y">Я уверена
     <br>
     <input class="checkbox" type="checkbox" name="e">что хочу удалить
