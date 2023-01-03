@@ -364,7 +364,7 @@ class PsychologyApplicationTests {
             assertThat(response.getStatus()).isEqualTo(200);
         }
 //        @Test
-//        public void showExistedDay() throws Exception {
+//        public void showExistedDayTest() throws Exception {
 //            MockHttpServletResponse response =
 //                    mockMvc.perform(get("/admin/admin_one_day/" + longData)
 //                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + headerBearer)
