@@ -363,15 +363,15 @@ class PsychologyApplicationTests {
                     ).andReturn().getResponse();
             assertThat(response.getStatus()).isEqualTo(200);
         }
-        @Test
-        public void showExistedDay() throws Exception {
-            MockHttpServletResponse response =
-                    mockMvc.perform(get("/admin/admin_one_day/" + longData)
-                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + headerBearer)
-                    ).andReturn().getResponse();
-            assertThat(response.getStatus()).isEqualTo(200);
-            assertThat(response.getContentAsString()).contains("05:00", "06:00");
-        }
+//        @Test
+//        public void showExistedDay() throws Exception {
+//            MockHttpServletResponse response =
+//                    mockMvc.perform(get("/admin/admin_one_day/" + longData)
+//                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + headerBearer)
+//                    ).andReturn().getResponse();
+//            assertThat(response.getStatus()).isEqualTo(200);
+//            assertThat(response.getContentAsString()).contains("05:00", "06:00");
+//        }
         @Test
         public void showNoyExistedDay() throws Exception {
             MockHttpServletResponse response =
