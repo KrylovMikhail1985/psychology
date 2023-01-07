@@ -132,7 +132,7 @@ public class Util {
         DayTime dayTime = therapy.getDayTime();
 
         String date = dateToString(dayTime.getDay().getDate());
-        date = date.substring(0,1).toUpperCase() + date.substring(1);
+        date = date.substring(0, 1).toUpperCase() + date.substring(1);
         String duration = durationToString(product.getDuration());
 
         return "Добрый день, " + therapy.getName() + "!"
