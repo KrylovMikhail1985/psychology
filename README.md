@@ -1,4 +1,4 @@
-# [KrylovaDi.ru](https://KrylovaDi.ru)
+# [Mobile website KrylovaDi.ru](https://KrylovaDi.ru)
 
 MOBILE webSite for recording on service:
 - admin create some products

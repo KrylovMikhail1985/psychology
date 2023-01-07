@@ -26,13 +26,16 @@
 <br>
 <form th:action="@{/confirm/} + ${product.id} + '/' + ${dayTime.id}" th:object="${therapy}">
     <span class="input">Имя: </span><input type="text" th:field="*{name}">
-    <x th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</x>
+    <br>
+    <x class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</x>
     <br/><br>
     <span class="input">Email: </span><input type="text" th:field="*{email}" placeholder="example@mail.ru">
-    <x th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Error</x>
+    <br>
+    <x class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Error</x>
     <br/><br>
     <span class="input">Телефон: </span><input type="text" th:field="*{phoneNumber}" placeholder="8(123)123-12-12">
-    <x th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}">Error</x>
+    <br>
+    <x class="error" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}">Error</x>
     <br/><br>
     <input class="button" style="size: 0.8rem" type="submit" value="Подтвердить через email">
     <br><br>
