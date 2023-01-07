@@ -1,9 +1,9 @@
-# [KrylovaDi.ru](KeylovaDi.ru)
+# [KrylovaDi.ru](https://KrylovaDi.ru)
 
-WebSite for recording on service:
+MOBILE webSite for recording on service:
 - admin create some products
-- admin activate days and times fo recording
-- users can choose product, day and time for recording. Confirmation recording by email.
+- admin activate days and times for recording
+- user can choose product, day and time for recording. Confirmation recording by email.
 - admin can transfer record on another day.
 
 Used technologies:
