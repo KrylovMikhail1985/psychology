@@ -7,7 +7,7 @@
     --r3: #4E2800;
     }
 html {
-    font-size: 3vw;
+    font-size: 6vw;
     margin: 0;
     padding: 0;
     }
@@ -32,7 +32,6 @@ select {
     font-size: 1rem;
     }
 input {
-    margin-top: 1rem;
     width: 80vw;
     font-size: 1rem;
     border: solid 0.05rem;
@@ -82,13 +81,13 @@ div > div > table {
     border-width: 0;
     }
 .checkbox {
-    width: 1rem;
-    height: 1rem;
-    border: solid red 1rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    border: solid red 0.5rem;
     }
 .checkbox2 {
     display: inline-block;
-    width: 8vw;
+    width: 4vw;
     }
 .emit{
     padding: 0, 1rem;
@@ -99,7 +98,7 @@ div > div > table {
     margin: auto;
     display: block;
     width: 98vw;
-    font-size: 1.5rem;
+    font-size: 1.1rem;
     text-align: center;
     text-decoration: none;
     background-color: var(--r1);
@@ -116,7 +115,7 @@ div > div > table {
 .button2 {
     margin: 0.2rem;
     display: inline-block;
-    width: 20vw;
+    width: 30vw;
     text-align: center;
     text-decoration: none;
     background-color: var(--r1);
@@ -127,7 +126,7 @@ div > div > table {
 .vertical-text {
     writing-mode:tb-rl;
     padding: 1rem 0;
-    transform: rotate(195deg);
+    transform: rotate(180deg);
     }
 .gray {
     color: gray

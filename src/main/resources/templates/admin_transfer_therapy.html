@@ -11,28 +11,29 @@
 <nav>
     <a href="/">Главная</a>
     |
-    <a href="/admin">Администратор</a>
+    <a href="/admin">Admin</a>
     |
-    <a href="/admin/all_days">Показать все рабочие дни</a>
+    <a href="/admin/all_days">Все рабочие дни</a>
 </nav>
 <body>
-<h2>Перенос терапии</h2>
+<h3>Перенос терапии</h3>
 Название: <strong th:text="${product.productName}">Название терапии</strong>
 <br>
 Клиент: <strong th:text="${therapy.name}">Ксения</strong>
 <br>
-email: <strong th:text="${therapy.email}">kkk@mail.com</strong>
+Email: <strong th:text="${therapy.email}">kkk@mail.com</strong>
 <br>
 Телефон: <strong th:text="${therapy.phoneNumber}">8(000)000-00-00</strong>
 <br>
-<h3>Пожалуйста выберите день и время</h3>
+<h3>Выберите день и время:</h3>
 <div>
     <a th:href="@{/admin/transfer_therapy/} + ${therapy.id} + '?' + week + '=' + ${before}"
-       class="button2"><--назад</a>
-    <span style="display: inline-block; width: 52vw"></span>
+       class="button2">Назад</a>
+    <span style="display: inline-block; width: 25vw"></span>
     <a th:href="@{/admin/transfer_therapy/} + ${therapy.id} + '?' + week + '=' + ${after}"
-       class="button2">вперед--></a>
+       class="button2">Вперед</a>
 </div>
+<br>
 <div class="row">
     <div class="column">
         <table>
@@ -110,5 +111,6 @@ email: <strong th:text="${therapy.email}">kkk@mail.com</strong>
         <span class="vertical-text" th:if="${d5.getDayTimes()} == null">на эту дату записи нет</span>
     </div>
 </div>
+<br><br>
 </body>
 </html>

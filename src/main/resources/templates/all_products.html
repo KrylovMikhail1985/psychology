@@ -12,16 +12,14 @@
     <a href="/">Главная</a>
 </nav>
 <body>
-
+    <h3>Перечень оказываемых услуг:</h3>
 <table style="border: none">
-    <tr style="border: none">
-        <th style="border: none">Перечень оказываемых услуг:</th>
-    </tr>
     <tr style="border: none" th:each="prod : ${listOfProducts}">
         <td style="border: none" th:if="${prod.isActual}"><a th:text="${prod.productName}"
                th:href="@{/product/} + ${prod.id}" class="button">Наименование продукта</a></td>
     </tr>
 </table>
+<br><br>
 
 </body>
 </html>

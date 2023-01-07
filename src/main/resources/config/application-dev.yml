@@ -1,9 +1,14 @@
 spring:
+#  datasource:
+#    url: jdbc:h2:file:./src/main/resources/db/myDB/myDB
+#    username: sa
+#    password:
+
   datasource:
-    url: jdbc:h2:file:./src/main/resources/db/myDB/myDB
-#    url: jdbc:h2:mem:myDB
-    username: sa
-    password:
+    url: jdbc:mysql://localhost:3306/my_db
+#    driver: com.mysql.jdbc.Driver
+    username: bestuser
+    password: bestuser
 
   h2:
     console:

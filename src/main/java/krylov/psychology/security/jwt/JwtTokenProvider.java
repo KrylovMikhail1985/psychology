@@ -15,10 +15,6 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 @Component
 public class JwtTokenProvider {
-    @Value("${adminPassword}")
-    private String adminPassword;
-    @Value("${adminName}")
-    private String adminName;
     @Value("${jwt-token-secret}")
     private String secret;
     @Value("${jwt-token-expired}")

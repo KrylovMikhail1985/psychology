@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/psyhdb
+    username: ${mysqluser}
+    password: ${mysqlpassword}
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/changelog-master.yaml
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate

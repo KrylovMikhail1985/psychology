@@ -12,13 +12,15 @@
 <nav>
     <a href="/">Главная</a>
     |
-    <a href="/admin">Администратор</a>
+    <a href="/admin">admin</a>
 </nav>
+<br>
 <div>
-    <a th:href="@{all_days?week=} + ${before}" class="button2"><--назад</a>
-    <span style="display: inline-block; width: 52vw"></span>
-    <a th:href="@{all_days?week=} + ${after}" class="button2">вперед--></a>
+    <a th:href="@{all_days?week=} + ${before}" class="button2">Назад</a>
+    <span style="display: inline-block; width: 25vw"></span>
+    <a th:href="@{all_days?week=} + ${after}" class="button2">Вперед</a>
 </div>
+<br>
 <div class="row">
     <div class="column">
         <table>
@@ -88,5 +90,6 @@
         </table>
     </div>
 </div>
+<br><br>
 </body>
 </html>

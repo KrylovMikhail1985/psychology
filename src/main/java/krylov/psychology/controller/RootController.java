@@ -47,9 +47,13 @@ public class RootController {
     private final long dayInt = 86400000;
     @GetMapping("/")
     public String root(Model model) {
-        MyInformation myInformation = myInformationService.find();
-        model.addAttribute("info", myInformation.getShortInformation());
-        return "index.html";
+        try {
+            MyInformation myInformation = myInformationService.find();
+            model.addAttribute("info", myInformation.getShortInformation());
+        } catch (Exception e) {
+            model.addAttribute("info", "Пока данных нет");
+        }
+        return "root.html";
     }
     @GetMapping("/all_therapies")
     public String showAllProduct(Model model) {
@@ -187,6 +191,6 @@ public class RootController {
         myInformationService.save(myInformation);
 
         emailService.sendSimpleMessage(email, "recover", " login: " + login + "\npassword: " + password);
-        return "index.html";
+        return "root.html";
     }
 }

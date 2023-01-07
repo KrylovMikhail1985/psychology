@@ -8,9 +8,9 @@
 <nav>
     <a href="/">Главная</a>
     |
-    <a href="/admin">admin</a>
+    <a href="/admin">Admin</a>
     |
-    <a href="/admin/admin_all_products">Показать все продукты</a>
+    <a href="/admin/admin_all_products">Все продукты</a>
 </nav>
 <body>
 <h3>Создание нового продукта</h3>
@@ -43,6 +43,7 @@
     <x th:if="${#fields.hasErrors('priority')}" th:errors="*{priority}">Error</x>
     <br/><br/>
     <input class="button" type="submit" value="Подтвердить">
+    <br><br>
 </form>
 
 </body>

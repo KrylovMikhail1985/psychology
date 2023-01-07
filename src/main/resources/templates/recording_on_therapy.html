@@ -11,19 +11,20 @@
 <nav>
     <a href="/">Главная</a>
     |
-    <a href="/all_therapies">Перечень предлагаемых услуг</a>
+    <a href="/all_therapies">Услуги</a>
 </nav>
 <body>
 <h3><x th:text="${product.productName}">Название терапии</x></h3>
 <div><strong>Стоимость: </strong><x th:text="${product.cost}">3000</x> руб</div>
 <div><strong>Продолжительность: </strong><x th:text="${product.duration}">1 час 30 мин</x></div>
-<h3 th:if="${timeIsOccupy}" style="background: red">Выбранное время уже заняли. Пожалуйста, выберите другое время</h3>
-<h3 th:if="!${timeIsOccupy}">Пожалуйста выберите день и время</h3>
+<h3 th:if="${timeIsOccupy}" style="background: red">Выбранное время уже заняли. Пожалуйста, выберите другое время:</h3>
+<h3 th:if="!${timeIsOccupy}">Выберите день и время:</h3>
 <div>
-    <a th:href="@{/record/} + ${product.id} + @{?week=} + ${before}" class="button2"><--назад</a>
-    <span style="display: inline-block; width: 52vw"></span>
-    <a th:href="@{/record/} + ${product.id} + @{?week=} + ${after}" class="button2">вперед--></a>
+    <a th:href="@{/record/} + ${product.id} + @{?week=} + ${before}" class="button2">Назад</a>
+    <span style="display: inline-block; width: 25.17vw"></span>
+    <a th:href="@{/record/} + ${product.id} + @{?week=} + ${after}" class="button2">Вперед</a>
 </div>
+<br>
 <div class="row">
     <div class="column">
         <table>
@@ -38,7 +39,7 @@
                 <td th:if="${!dayTime.isTimeIsFree()}" th:text="${dayTime.localTime}" class="gray">9:00</td>
             </tr>
         </table>
-        <span class="vertical-text" th:if="${d1.getDayTimes()} == null">на эту дату записи нет</span>
+        <span class="vertical-text" th:if="${d1.getDayTimes()} == null">Нет записи</span>
     </div>
     <div class="column">
         <table>
@@ -53,7 +54,7 @@
                 <td th:if="${!dayTime.isTimeIsFree()}" th:text="${dayTime.localTime}" class="gray">9:00</td>
             </tr>
         </table>
-        <span class="vertical-text" th:if="${d2.getDayTimes()} == null">на эту дату записи нет</span>
+        <span class="vertical-text" th:if="${d2.getDayTimes()} == null">Нет записи</span>
     </div>
     <div class="column">
         <table>
@@ -68,7 +69,7 @@
                 <td th:if="${!dayTime.isTimeIsFree()}" th:text="${dayTime.localTime}" class="gray">9:00</td>
             </tr>
         </table>
-        <span class="vertical-text" th:if="${d3.getDayTimes()} == null">на эту дату записи нет</span>
+        <span class="vertical-text" th:if="${d3.getDayTimes()} == null">Нет записи</span>
     </div>
     <div class="column">
         <table>
@@ -83,7 +84,7 @@
                 <td th:if="${!dayTime.isTimeIsFree()}" th:text="${dayTime.localTime}" class="gray">9:00</td>
             </tr>
         </table>
-        <span class="vertical-text" th:if="${d4.getDayTimes()} == null">на эту дату записи нет</span>
+        <span class="vertical-text" th:if="${d4.getDayTimes()} == null">Нет записи</span>
     </div>
     <div class="column">
         <table>
@@ -98,8 +99,9 @@
                 <td th:if="${!dayTime.isTimeIsFree()}" th:text="${dayTime.localTime}" class="gray">9:00</td>
             </tr>
         </table>
-        <span class="vertical-text" th:if="${d5.getDayTimes()} == null">на эту дату записи нет</span>
+        <span class="vertical-text" th:if="${d5.getDayTimes()} == null">Нет записи</span>
     </div>
 </div>
+<br><br>
 </body>
 </html>

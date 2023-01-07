@@ -1,6 +1,6 @@
 databaseChangeLog:
 - changeSet:
-    id: 1671953564402-1
+    id: 1672863152595-1
     author: mikhailkrylov (generated)
     changes:
     - createTable:
@@ -24,7 +24,7 @@ databaseChangeLog:
             type: BIGINT
         tableName: day_times
 - changeSet:
-    id: 1671953564402-2
+    id: 1672863152595-2
     author: mikhailkrylov (generated)
     changes:
     - createTable:
@@ -42,7 +42,7 @@ databaseChangeLog:
             type: TIMESTAMP
         tableName: days
 - changeSet:
-    id: 1671953564402-3
+    id: 1672863152595-3
     author: mikhailkrylov (generated)
     changes:
     - createTable:
@@ -60,7 +60,31 @@ databaseChangeLog:
             type: time
         tableName: default_time
 - changeSet:
-    id: 1671953564402-4
+    id: 1672863152595-4
+    author: mikhailkrylov (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: my_informationPK
+            name: id
+            type: BIGINT
+        - column:
+            name: login
+            type: VARCHAR(255)
+        - column:
+            name: password
+            type: VARCHAR(255)
+        - column:
+            name: short_information
+            type: CLOB
+        tableName: my_information
+- changeSet:
+    id: 1672863152595-5
     author: mikhailkrylov (generated)
     changes:
     - createTable:
@@ -93,7 +117,7 @@ databaseChangeLog:
             type: VARCHAR(255)
         tableName: products
 - changeSet:
-    id: 1671953564402-5
+    id: 1672863152595-6
     author: mikhailkrylov (generated)
     changes:
     - createTable:
@@ -119,11 +143,14 @@ databaseChangeLog:
             name: phone_number
             type: VARCHAR(255)
         - column:
+            name: day_time_id
+            type: BIGINT
+        - column:
             name: product_id
             type: BIGINT
         tableName: therapies
 - changeSet:
-    id: 1671953564402-6
+    id: 1672863152595-7
     author: mikhailkrylov (generated)
     changes:
     - addForeignKeyConstraint:
@@ -136,7 +163,7 @@ databaseChangeLog:
         referencedTableName: days
         validate: true
 - changeSet:
-    id: 1671953564402-7
+    id: 1672863152595-8
     author: mikhailkrylov (generated)
     changes:
     - addForeignKeyConstraint:
@@ -147,5 +174,18 @@ databaseChangeLog:
         initiallyDeferred: false
         referencedColumnNames: id
         referencedTableName: products
+        validate: true
+- changeSet:
+    id: 1672863152595-9
+    author: mikhailkrylov (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: day_time_id
+        baseTableName: therapies
+        constraintName: FKkv9tk11mt2c2gg9rbweetvjxk
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: day_times
         validate: true
 

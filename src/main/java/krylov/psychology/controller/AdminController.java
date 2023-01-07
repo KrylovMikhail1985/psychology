@@ -425,7 +425,7 @@ public class AdminController {
         MyInformation info = myInformationService.find();
         info.setShortInformation(myInformation.getShortInformation());
         myInformationService.save(info);
-        return "index.html";
+        return "root.html";
     }
     @GetMapping("/update_login_info")
     public String updateLoginInfo(Model model) {

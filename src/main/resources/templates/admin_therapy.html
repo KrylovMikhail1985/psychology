@@ -11,39 +11,40 @@
 <nav>
     <a href="/">Главная</a>
     |
-    <a href="/admin">Администратор</a>
+    <a href="/admin">Admin</a>
     |
-    <a href="/admin/all_days">Показать все рабочие дни</a>
+    <a href="/admin/all_days">Все рабочие дни</a>
 </nav>
 <body>
-<div>День и время записи:</div>
+<div>Время записи:</div>
 <strong th:text="${#dates.format(day.getDate(), 'EEEE dd.MM.yyyy')}">23.11.2022</strong>
-<span>в</span>
 <strong th:text="${dayTime.getLocalTime()}">11:00</strong>
 <br/>
 Имя: <strong th:text="${therapy.name}">Имя</strong>
 <br/>
 Email: <strong th:text="${therapy.email}">Email@mail.com</strong>
 <br/>
-телефон: <strong th:text="${therapy.phoneNumber}">8(123)456-56-56</strong>
+Телефон: <strong th:text="${therapy.phoneNumber}">8(123)456-56-56</strong>
 <!--<br/>-->
 <!--дата записи: <strong th:text="${therapy.createdAt}">12.08.23 11:45</strong>-->
 <br/>
-продукт: <strong th:text="${product.productName}">Название терапии</strong>
+Продукт: <strong th:text="${product.productName}">Название терапии</strong>
 <br/>
-длительность: <strong th:text="${product.duration}">02:30</strong>
+Длительность: <strong th:text="${product.duration}">02:30</strong>
 <br/>
-стоимость: <strong th:text="${product.cost}">02:30</strong>
+Стоимость: <strong th:text="${product.cost}">02:30</strong>
 </body>
+<br><br>
+<a th:href="@{/admin/transfer_therapy/} + ${therapy.id}" class="button">Перенести запись</a>
 <br>
-<a th:href="@{/admin/transfer_therapy/} + ${therapy.id}" class="button">перенести запись</a>
 <form th:action="@{/admin/delete_therapy/} + ${therapy.id}" method="post">
     <input class="checkbox" type="checkbox" name="y">Я уверена
     <br>
     <input class="checkbox" type="checkbox" name="e">что хочу удалить
     <br>
     <input class="checkbox" type="checkbox" name="s">эту запись!
-    <br>
+    <br><br>
     <input class="button" type="submit" value="Удалить">
 </form>
+<br><br>
 </html>

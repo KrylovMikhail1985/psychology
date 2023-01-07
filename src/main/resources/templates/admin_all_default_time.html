@@ -9,9 +9,9 @@
 <nav>
     <a href="/">Главная</a>
     |
-    <a href="/admin">Администратор</a>
+    <a href="/admin">Admin</a>
     |
-    <a href="/admin/new_default_time">Добавить новое время записи</a>
+    <a href="/admin/new_default_time">Добавить время</a>
 </nav>
 <h3>Общее возможное время записи</h3>
 <table>
@@ -24,5 +24,6 @@
         <td><a th:href="@{delete_default_time/} + ${time.id}" style="width: 85vw" class="button">удалить</a></td>
     </tr>
 </table>
+<br><br>
 </body>
 </html>

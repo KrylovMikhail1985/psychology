@@ -379,7 +379,7 @@ class PsychologyApplicationTests {
                             .header(HttpHeaders.AUTHORIZATION, "Bearer " + headerBearer)
                     ).andReturn().getResponse();
             assertThat(response.getStatus()).isEqualTo(200);
-            assertThat(response.getContentAsString()).contains("Открыть запись на данный день");
+            assertThat(response.getContentAsString()).contains("Открыть запись");
         }
         @Test
         public void deleteDayTest() throws Exception {
@@ -463,7 +463,7 @@ class PsychologyApplicationTests {
                     mockMvc.perform(get("/record/2")
                     ).andReturn().getResponse();
             assertThat(response.getStatus()).isEqualTo(200);
-            assertThat(response.getContentAsString()).contains("Пожалуйста выберите день и время", "05:00");
+            assertThat(response.getContentAsString()).contains("Выберите день и время", "05:00");
             assertThat(response.getContentAsString()).doesNotContain("Выбранное время уже заняли");
         }
         @Test
@@ -472,7 +472,7 @@ class PsychologyApplicationTests {
                     mockMvc.perform(get("/record/2?week=5")
                     ).andReturn().getResponse();
             assertThat(response.getStatus()).isEqualTo(200);
-            assertThat(response.getContentAsString()).contains("Пожалуйста выберите день и время");
+            assertThat(response.getContentAsString()).contains("Выберите день и время");
             assertThat(response.getContentAsString()).doesNotContain("05:00, Выбранное время уже заняли");
         }
         @Test
@@ -490,7 +490,7 @@ class PsychologyApplicationTests {
                     ).andReturn().getResponse();
             assertThat(response.getStatus()).isEqualTo(200);
             assertThat(response.getContentAsString()).contains("Терапия 2", "06:00",
-                    "Пожалуйста введите контактные данные");
+                    "Введите контактные данные");
             assertThat(response.getContentAsString()).doesNotContain("Вы ввели не тот код", "05:00");
         }
 //        @Test

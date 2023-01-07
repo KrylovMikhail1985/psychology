@@ -12,16 +12,16 @@
 <nav>
     <a href="/">Главная</a>
     |
-    <a href="/admin">Администратор</a>
+    <a href="/admin">Admin</a>
     |
-    <a href="/admin/all_days">Показать все рабочие дни</a>
+    <a href="/admin/all_days">Все рабочие дни</a>
 </nav>
 
 <h3 th:text="${#dates.format(day.getDate(), 'EEEE dd.MM.yyyy')}"> 23.11.1985</h3>
 <table>
     <thead>
-        <th>время</th>
-        <th>активность</th>
+        <th>Время</th>
+        <th>Активность</th>
         <th>Информация</th>
     </thead>
     <tr th:each="dayTime : ${dayTimeList}">
@@ -36,6 +36,7 @@
 </table>
 <br>
 <a th:if="${thereIsNoTherapyThisDay}" class="button"
-   th:href="@{/admin/delete_day/} + ${day.getId()}">удалить день</a>
+   th:href="@{/admin/delete_day/} + ${day.getId()}">Удалить день</a>
+<br><br>
 </body>
 </html>

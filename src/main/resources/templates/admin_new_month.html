@@ -8,7 +8,7 @@
 <nav>
     <a href="/">Главная</a>
     |
-    <a href="/admin">admin</a>
+    <a href="/admin">Admin</a>
 </nav>
 <body>
 Выбираем по каким числам будем работать:
@@ -20,7 +20,7 @@
     <input class="checkbox" type="checkbox" name="5" value="5"><span class="checkbox2">5</span>
     <input class="checkbox" type="checkbox" name="6" value="6"><span class="checkbox2">6</span>
     <input class="checkbox" type="checkbox" name="7" value="7"><span class="checkbox2">7</span>
-    <br/>
+    <br><br>
     <input class="checkbox" type="checkbox" name="8" value="8"><span class="checkbox2">8</span>
     <input class="checkbox" type="checkbox" name="9" value="9"><span class="checkbox2">9</span>
     <input class="checkbox" type="checkbox" name="10" value="10"><span class="checkbox2">10</span>
@@ -28,7 +28,7 @@
     <input class="checkbox" type="checkbox" name="12" value="12"><span class="checkbox2">12</span>
     <input class="checkbox" type="checkbox" name="13" value="13"><span class="checkbox2">13</span>
     <input class="checkbox" type="checkbox" name="14" value="14"><span class="checkbox2">14</span>
-    <br/>
+    <br><br>
     <input class="checkbox" type="checkbox" name="15" value="15"><span class="checkbox2">15</span>
     <input class="checkbox" type="checkbox" name="16" value="16"><span class="checkbox2">16</span>
     <input class="checkbox" type="checkbox" name="17" value="17"><span class="checkbox2">17</span>
@@ -36,7 +36,7 @@
     <input class="checkbox" type="checkbox" name="19" value="19"><span class="checkbox2">19</span>
     <input class="checkbox" type="checkbox" name="20" value="20"><span class="checkbox2">20</span>
     <input class="checkbox" type="checkbox" name="21" value="21"><span class="checkbox2">21</span>
-    <br/>
+    <br><br>
     <input class="checkbox" type="checkbox" name="22" value="22"><span class="checkbox2">22</span>
     <input class="checkbox" type="checkbox" name="23" value="23"><span class="checkbox2">23</span>
     <input class="checkbox" type="checkbox" name="24" value="24"><span class="checkbox2">24</span>
@@ -44,7 +44,7 @@
     <input class="checkbox" type="checkbox" name="26" value="26"><span class="checkbox2">26</span>
     <input class="checkbox" type="checkbox" name="27" value="27"><span class="checkbox2">27</span>
     <input class="checkbox" type="checkbox" name="28" value="28"><span class="checkbox2">28</span>
-    <br/>
+    <br><br>
     <input th:if="${countOfDays} > 28" class="checkbox" type="checkbox" name="29" value="29">
     <span th:if="${countOfDays} > 28" class="checkbox2">29</span>
     <input th:if="${countOfDays} > 29" class="checkbox" type="checkbox" name="30" value="30">
@@ -55,6 +55,7 @@
     <input type="text" hidden="hidden" name="year" th:value="${year}">
     <br><br>
     <input class="button" type="submit" value="Подтвердить">
+    <br><br>
 </form>
 
 </body>

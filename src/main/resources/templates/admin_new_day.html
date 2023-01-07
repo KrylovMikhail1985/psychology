@@ -8,9 +8,9 @@
 <nav>
     <a href="/">Главная</a>
     |
-    <a href="/admin">Администратор</a>
+    <a href="/admin">Admin</a>
     |
-    <a href="/admin/all_days">Показать все рабочие дни</a>
+    <a href="/admin/all_days">Все рабочие дни</a>
 </nav>
 <br>
 <body>
@@ -18,7 +18,7 @@
 <form action="/admin/post_create_new_day" method="post">
     <input type="number" hidden="hidden" name="dataTime" th:value="${dataTimeLong.getTime()}">
     <br>
-    <input class="button" type="submit" value="Открыть запись на данный день"/>
+    <input class="button" type="submit" value="Открыть запись"/>
 </form>
 
 </body>

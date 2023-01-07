@@ -11,28 +11,24 @@
 <nav>
     <a href="/">Главная</a>
     |
-    <a href="/all_therapies">Перечень предлагаемых услуг</a>
+    <a href="/all_therapies">Услуги</a>
 </nav>
 <body>
 <h3><x th:text="${product.productName}">Название терапии</x></h3>
 <div>Стоимость: <x th:text="${product.cost}">3000</x> руб</div>
 <div>Продолжительность: <x th:text="${product.duration}">1 час 30 мин</x></div>
-<div>День и время записи:
+<div>День и время записи:<br>
     <strong th:text="${#dates.format(day.getDate(), 'EEEE dd.MM.yyyy')}">23.11.2022</strong>
-    <span>в</span>
     <strong th:text="${dayTime.getLocalTime()}">11:00</strong>
 </div>
 <br>
-<div><span class="input">Имя:</span><strong th:text="${therapy.name}">Дарья</strong></div>
-<div><span class="input">email: </span><strong th:text="${therapy.email}">email@email.com</strong></div>
-<div><span class="input">Телефон: </span><strong th:text="${therapy.phoneNumber}">8(000)000-00-00</strong></div>
+<div><span>Имя: </span><strong th:text="${therapy.name}">Дарья</strong></div>
+<div><span>Email: </span><strong th:text="${therapy.email}">email@email.com</strong></div>
+<div><span>Телефон: </span><strong th:text="${therapy.phoneNumber}">8(000)000-00-00</strong></div>
 <br>
 <form th:action="@{/confirm2/} + ${product.id} + '/' + ${dayTime.id}" th:object="${therapy}">
-    <span th:if="${codeIsNotCorrect}">
-        Вы ввели не тот код.
-        Мы направили вам новый.
-        Для подтверждения записи </span>
-    ведите код отправленный на почту:
+    <span th:if="${codeIsNotCorrect}">Вы ввели не тот код. Мы направили вам новый.</span>
+        Для подтверждения записи ведите код отправленный на почту:
     <br/>
     <input type="hidden" name="name" th:value="${therapy.name}">
     <input type="hidden" name="email" th:value="${therapy.email}">
@@ -41,7 +37,7 @@
     <input class="center" style="width: 97.5vw; margin: 1vw" type="text" name="inputForeSymbolCode" placeholder="9999">
     <br><br>
     <input class="button" type="submit" value="Подтвердить">
-    <br>
+    <br><br>
 </form>
 </body>
 </html>
