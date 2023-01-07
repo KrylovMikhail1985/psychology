@@ -132,7 +132,6 @@ public class Util {
         DayTime dayTime = therapy.getDayTime();
 
         String date = dateToString(dayTime.getDay().getDate());
-        date = date.substring(0, 1).toUpperCase() + date.substring(1);
         String duration = durationToString(product.getDuration());
 
         return "Добрый день, " + therapy.getName() + "!"
@@ -159,7 +158,9 @@ public class Util {
     private static String dateToString(Date date) {
         String pattern = "EEEE d MMMM";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, new Locale("ru"));
-        return simpleDateFormat.format(date);
+        String result = simpleDateFormat.format(date);
+        result = result.substring(0, 1).toUpperCase() + result.substring(1);
+        return result;
     }
     private static void checkThatAllDayTimesIsFree(Day day, LocalTime startOfTherapy, LocalTime endOfTherapy) {
         for (DayTime dayTime: day.getDayTimes()) {
