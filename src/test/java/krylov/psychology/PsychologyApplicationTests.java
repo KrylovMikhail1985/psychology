@@ -75,7 +75,6 @@ class PsychologyApplicationTests {
                 this.headerBearer = cookies[i].getValue();
             }
         }
-
         Date tomorrow = Util.dateTomorrow(new Date());
         String longDay = String.valueOf(tomorrow.getTime());
         MockHttpServletResponse response1 =

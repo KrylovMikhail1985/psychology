@@ -186,7 +186,7 @@ public class Util {
         today.setHours(0);
         int year = today.getYear();
         int month = today.getMonth();
-        int day1 = today.getDay() + 1;
+        int day1 = today.getDate();
         Date tomorrow = new Date(year, month, day1 + 1);
         return tomorrow;
     }

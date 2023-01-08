@@ -25,15 +25,15 @@
 <div>Введите контактные данные:</div>
 <br>
 <form th:action="@{/confirm/} + ${product.id} + '/' + ${dayTime.id}" th:object="${therapy}">
-    <span class="input">Имя: </span><input type="text" th:field="*{name}">
+    <span class="input">Имя: </span><br><input type="text" th:field="*{name}">
     <br>
     <x class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</x>
     <br/><br>
-    <span class="input">Email: </span><input type="text" th:field="*{email}" placeholder="example@mail.ru">
+    <span class="input">Email: </span><br><input type="text" th:field="*{email}" placeholder="example@mail.ru">
     <br>
     <x class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Error</x>
     <br/><br>
-    <span class="input">Телефон: </span><input type="text" th:field="*{phoneNumber}" placeholder="8(123)123-12-12">
+    <span class="input">Телефон: </span><br><input type="text" th:field="*{phoneNumber}" placeholder="8(123)123-12-12">
     <br>
     <x class="error" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}">Error</x>
     <br/><br>
