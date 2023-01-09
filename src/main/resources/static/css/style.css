@@ -32,7 +32,7 @@ select {
     font-size: 1rem;
     }
 input {
-    width: 80vw;
+    width: 92vw;
     font-size: 1rem;
     border: solid 0.05rem;
     border-color: var(--s1);
@@ -97,7 +97,7 @@ div > div > table {
 .button {
     margin: auto;
     display: block;
-    width: 98vw;
+    width: 96vw;
     font-size: 1.1rem;
     text-align: center;
     text-decoration: none;

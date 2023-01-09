@@ -29,7 +29,9 @@
     <x th:if="${#fields.hasErrors('duration')}" th:errors="*{duration}">Error</x>
 </input>
     <br/><br/>
-    Описание: <br/><input type="text" th:field="*{description}"><br>
+    Описание: <br/><textarea style="font-size: 1rem" cols="25" rows="5" type="text" th:field="*{description}">
+    Тут будет какое-то описание
+    </textarea><br>
     <x th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Error</x>
     <br/><br/>
     Актуальность: <select type="text" th:field="*{actual}">

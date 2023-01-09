@@ -15,7 +15,8 @@ echo 'Restart application'
 
 ssh -i ~/.ssh/id_rsa mmm@82.146.32.182 << EOF
     pgrep java | xargs kill -9
-    java -jar ./code/psychology-0.0.1-snapshot.jar &
+    rm log.txt
+    java -jar ./code/psychology-0.0.1-snapshot.jar > log.txt &
 EOF
 
 echo 'Bye'

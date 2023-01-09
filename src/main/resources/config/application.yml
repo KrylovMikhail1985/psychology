@@ -21,7 +21,7 @@ spring:
           auth: true
           starttls.enable: true
 
-jwt-token-secret: ${JWT-SECRET:lkrfslrekjfalecmasieuro3wurhnsjkcafjsefljashkfaewjkfljsrhkjgjsfndjtgtdlgjsghsjdyr}
+jwt-token-secret: ${JWTSECRET:lkrfslrekjfalecmasieuro3wurhnsjkcafjsefljashkfaewjkfljsrhkjgjsfndjtgtdlgjsghsjdyr}
 # 3600000 - 1 hour
 jwt-token-expired: 3600000
 

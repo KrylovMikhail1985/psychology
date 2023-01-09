@@ -10,15 +10,15 @@
     |
     <a href="/admin">Admin</a>
     |
-    <a href="/admin/update_login_info">Обновление пароля</a>
+    <a href="/admin/update_login_info">Сменить пароль</a>
 </nav>
 <body>
 <h3>Обновление данных пользователя</h3>
     <form action="/admin/update_info" method="post" th:object="${information}">
-        <br>
         Описание:
         <br>
-        <input type="text" name="shortInformation" th:field="*{shortInformation}">
+        <textarea style="font-size: 1rem" cols="25" rows="5" type="text"
+                  name="shortInformation" th:field="*{shortInformation}"></textarea>
         <br><br>
         <input class="button" type="submit" value="Обновить информацию">
         <br>
