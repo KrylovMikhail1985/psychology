@@ -180,9 +180,9 @@ public class AdminController {
         return "admin_new_month.html";
     }
     @PostMapping("/active_new_month")
-    public String activeNewMonth(@RequestParam(name = "month") Integer month,
-                                 @RequestParam(name = "year") Integer year,
-                                 @RequestBody MultiValueMap<String, String> formData) {
+    public String activeNewMonth(@RequestBody MultiValueMap<String, String> formData) {
+        int month = Integer.parseInt(formData.get("month").get(0));
+        int year = Integer.parseInt(formData.get("year").get(0));
         formData.remove("month");
         formData.remove("year");
         //change MultiValueMap to List<Integer>

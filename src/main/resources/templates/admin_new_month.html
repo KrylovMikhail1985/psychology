@@ -51,7 +51,7 @@
     <span th:if="${countOfDays} > 29" class="checkbox2">30</span>
     <input th:if="${countOfDays} > 30" class="checkbox" type="checkbox" name="31" value="31">
     <span th:if="${countOfDays} > 30" class="checkbox2">31</span>
-    <input type="month" hidden="hidden" name="month" th:value="${month}">
+    <input type="text" hidden="hidden" name="month" th:value="${month}">
     <input type="text" hidden="hidden" name="year" th:value="${year}">
     <br><br>
     <input class="button" type="submit" value="Подтвердить">
