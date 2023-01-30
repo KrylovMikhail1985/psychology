@@ -164,7 +164,6 @@ public class AdminController {
         Date date = new Date();
         int month = date.getMonth();
         int year = date.getYear();
-        int dateDate = date.getDate();
         if (next != null && next.equalsIgnoreCase("yes")) {
             if (month == 11) {
                 month = 0;
@@ -172,8 +171,9 @@ public class AdminController {
             } else {
                 month = month + 1;
             }
+
         }
-        date = new Date(year, month, dateDate);
+        date = new Date(year, month, 1);
         model.addAttribute("month", month);
         model.addAttribute("year", year);
         model.addAttribute("countOfDays", Util.countOfDaysInMonth(date));
